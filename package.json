@@ -1,0 +1,29 @@
+{
+  "name": "proj-messenger-app",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Kohei Furukawa <“furukawabashi42@gmail.com“>",
+  "license": "MIT",
+  "dependencies": {
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
+  },
+  "scripts": {
+    "start": "webpack-dev-server --mode development --config webpack.config.js",
+    "build": "webpack --config webpack.config.js"
+  },
+  "devDependencies": {
+    "@types/react": "^16.9.26",
+    "@types/react-dom": "^16.9.5",
+    "html-webpack-plugin": "^4.0.2",
+    "path": "^0.12.7",
+    "ts-loader": "^6.2.2",
+    "tslint": "^6.1.0",
+    "tslint-config-airbnb": "^5.11.2",
+    "tslint-loader": "^3.5.4",
+    "typescript": "^3.8.3",
+    "webpack": "^4.42.1",
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.10.3"
+  }
+}
