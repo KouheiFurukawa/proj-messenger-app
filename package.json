@@ -13,7 +13,7 @@
     "typescript-fsa-reducers": "^1.2.1"
   },
   "scripts": {
-    "start": "concurrently \"webpack-dev-server --mode development --config webpack.config.dev.js\" \"node server/index.js\"",
+    "start": "concurrently \"webpack-dev-server --mode development --config webpack.config.js\" \"node server/index.js\"",
     "build": "webpack --config webpack.config.js",
     "lint:fix": "tslint --project tsconfig.json --fix"
   },

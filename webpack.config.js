@@ -54,6 +54,7 @@ module.exports = {
         proxy: {
             '/server/**': {
                 target: 'http://localhost:3000',
+                pathRewrite: {'^/server' : ''},
                 secure: false,
                 logLevel: 'debug'
             }
