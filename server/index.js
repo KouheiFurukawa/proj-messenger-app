@@ -16,6 +16,13 @@ app.get('/get_user/', (req, res) => {
     });
 });
 
+app.get('/get_friend/', (req, res) => {
+    connection.query('select * from friendship where(user_id = \'test1\' or friend_id = \'test1\')', (error, results, fields) => {
+        if (error) throw error;
+        res.json(results);
+    });
+});
+
 app.get('/get_message/', (req, res) => {
     connection.query('select * from message where (user_from = \'test1\' and user_to = \'test2\') or (user_from = \'test2\' and user_to = \'test1\')', (error, results, fields) => {
         if (error) throw error;
