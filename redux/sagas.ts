@@ -5,7 +5,7 @@ import ApiClient from '../src/ApiClient';
 function* getFriendsHandler() {
     while (true) {
         const { payload } = yield take('ACTIONS_GET_FRIENDS_STARTED');
-        const { result, error } = yield call(ApiClient.getUser);
+        const { result, error } = yield call(ApiClient.getFriend);
         if (result && !error) {
             yield put(actions.successGetFriends({ result, params: '' }));
         } else {
