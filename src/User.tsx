@@ -15,15 +15,16 @@ const useStyles = makeStyles({
         height: '7vh',
     },
     gridItem: {
-        margin: '0 40px',
+        margin: '0 20px',
         display: 'flex',
+        height: '100%',
         flexDirection: 'column',
         justifyContent: 'center',
     },
     avatar: {
-        fontSize: '40px',
-        height: '100px',
-        width: '100px',
+        fontSize: '25px',
+        height: '45px',
+        width: '45px',
     },
     gridName: {
         display: 'flex',
@@ -31,7 +32,7 @@ const useStyles = makeStyles({
         justifyContent: 'center',
     },
     name: {
-        fontSize: '50px',
+        fontSize: '30px',
     },
 });
 
