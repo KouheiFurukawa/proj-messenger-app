@@ -51,5 +51,12 @@ module.exports = {
         inline: true,
         host: 'localhost',
         port: 8080,
+        proxy: {
+            '/server/**': {
+                target: 'http://localhost:3000',
+                secure: false,
+                logLevel: 'debug'
+            }
+        },
     }
 };
