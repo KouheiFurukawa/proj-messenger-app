@@ -2,7 +2,7 @@ import * as React from 'react';
 import Search from '@material-ui/icons/Search';
 import Chat from '@material-ui/icons/Chat';
 import PeopleAlt from '@material-ui/icons/PeopleAlt';
-import { Paper, Tabs, Tab, makeStyles } from '@material-ui/core';
+import { Paper, Tabs, Tab, makeStyles, colors } from '@material-ui/core';
 import { State } from '../redux/reducer';
 import { connect, useDispatch } from 'react-redux';
 import { Dispatch } from 'redux';
@@ -36,14 +36,28 @@ type AppProps = OwnProps & State;
 
 const useStyles = makeStyles({
     main: {
-        height: '92vh',
+        height: '85vh',
+    },
+    header: {
+        height: '7vh',
+        backgroundColor: colors.indigo[500],
+        color: 'white',
+        fontSize: '30px',
+        paddingLeft: '30px',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        borderRadius: '0',
     },
     bottomTabs: {
         height: '8vh',
+        position: 'fixed',
+        bottom: '3px',
+        width: '100%',
     },
     tab: {
         height: '8vh',
-        fontSize: 25,
+        fontSize: 15,
     },
 });
 
@@ -58,6 +72,13 @@ const App: React.FC<AppProps> = (props: AppProps) => {
 
     return (
         <div>
+            <Paper className={classes.header} elevation={3}>
+                <span>
+                    {props.tabValue === 0 && 'Search'}
+                    {props.tabValue === 1 && 'Friends'}
+                    {props.tabValue === 2 && 'Chat'}
+                </span>
+            </Paper>
             <div className={classes.main}>
                 {props.tabValue === 1 &&
                     props.friends.map((friend) => {
@@ -72,14 +93,14 @@ const App: React.FC<AppProps> = (props: AppProps) => {
                     value={props.tabValue}
                     onChange={(e, newVal) => props.handleOnChangeTab(newVal)}
                 >
-                    <Tab icon={<Search style={{ fontSize: 40 }} />} label="Search" className={classes.tab} value={0} />
+                    <Tab icon={<Search style={{ fontSize: 25 }} />} label="Search" className={classes.tab} value={0} />
                     <Tab
-                        icon={<PeopleAlt style={{ fontSize: 40 }} />}
+                        icon={<PeopleAlt style={{ fontSize: 25 }} />}
                         label="Friends"
                         className={classes.tab}
                         value={1}
                     />
-                    <Tab icon={<Chat style={{ fontSize: 40 }} />} label="Chat" className={classes.tab} value={2} />
+                    <Tab icon={<Chat style={{ fontSize: 25 }} />} label="Chat" className={classes.tab} value={2} />
                 </Tabs>
             </Paper>
         </div>
