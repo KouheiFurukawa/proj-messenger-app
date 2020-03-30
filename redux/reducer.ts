@@ -7,6 +7,9 @@ export interface State {
     userSearchInput: string;
     friends: any[];
     messages: any[];
+    idInput: string;
+    passwordInput: string;
+    loginDisplayMode: string;
 }
 
 export const initialState: State = {
@@ -15,6 +18,9 @@ export const initialState: State = {
     userSearchInput: '',
     friends: [],
     messages: [],
+    idInput: '',
+    passwordInput: '',
+    loginDisplayMode: 'button',
 };
 
 export const reducer = reducerWithInitialState(initialState)
@@ -32,4 +38,13 @@ export const reducer = reducerWithInitialState(initialState)
     })
     .case(actions.successGetMessages, (state, action) => {
         return { ...state, messages: action.result };
+    })
+    .case(actions.changeIdInput, (state, action) => {
+        return { ...state, idInput: action };
+    })
+    .case(actions.changePasswordInput, (state, action) => {
+        return { ...state, passwordInput: action };
+    })
+    .case(actions.changeLoginDisplayMode, (state, action) => {
+        return { ...state, loginDisplayMode: action };
     });
