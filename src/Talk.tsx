@@ -13,11 +13,12 @@ interface OwnProps {
     history: H.History;
 }
 
-type TalkProps = OwnProps & Pick<State, 'chatFriend'>;
+type TalkProps = OwnProps & Pick<State, 'chatFriend' | 'messages'>;
 
 const mapStateToProps = (appState: AppState) => {
     return {
         chatFriend: appState.state.chatFriend,
+        messages: appState.state.messages,
     };
 };
 
@@ -79,7 +80,7 @@ const Talk: React.FC<TalkProps> = (props: TalkProps) => {
             </Paper>
             <Grid container className={classes.gridContainer}>
                 <Grid item xs={12} className={classes.gridChatLog}>
-                    talk
+                    {props.messages.length > 0 && props.messages[0].text}
                 </Grid>
                 <Grid item xs={12} className={classes.gridForm}>
                     <Paper className={classes.formContainer} elevation={3}>

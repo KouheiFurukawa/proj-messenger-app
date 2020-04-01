@@ -41,7 +41,7 @@ app.get('/get_friend/', (req, res) => {
 });
 
 app.get('/get_message/', (req, res) => {
-    connection.query('select * from message where (user_from = \'test1\' and user_to = \'test2\') or (user_from = \'test2\' and user_to = \'test1\')', (error, results, fields) => {
+    connection.query(`select * from message where (user_from = '${req.query.user1}' and user_to = '${req.query.user2}') or (user_from = '${req.query.user2}' and user_to = '${req.query.user1}')`, (error, results, fields) => {
         if (error) throw error;
         res.json(results);
     });

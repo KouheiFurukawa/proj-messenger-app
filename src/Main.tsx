@@ -43,6 +43,9 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
                 .catch((err) => console.error(err));
         },
         handleOnClickFriend(name: string, props: MainProps): void {
+            if (name !== props.chatFriend.displayName) {
+                dispatch(actions.requestGetMessages({ user1: props.loginInfo.id, user2: name }));
+            }
             dispatch(actions.changeChatFriend(name));
             props.history.push('/talk');
         },
