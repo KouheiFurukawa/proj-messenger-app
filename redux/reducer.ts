@@ -9,6 +9,7 @@ export interface State {
     messages: any[];
     idInput: string;
     passwordInput: string;
+    displayNameInput: string;
     loginDisplayMode: string;
     loginInfo: {
         displayName: string;
@@ -24,6 +25,7 @@ export const initialState: State = {
     messages: [],
     idInput: '',
     passwordInput: '',
+    displayNameInput: '',
     loginDisplayMode: 'button',
     loginInfo: {
         displayName: '',

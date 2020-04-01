@@ -7,14 +7,19 @@ import { connect } from 'react-redux';
 import { AppState } from '../redux/store';
 import ExitToApp from '@material-ui/icons/ExitToApp';
 import ArrowBackIos from '@material-ui/icons/ArrowBackIos';
+import ApiClient from './ApiClient';
+import * as H from 'history';
 
 interface OwnProps {
     handleOnChangeIdInput(value: string): void;
     handleOnChangePasswordInput(value: string): void;
     handleOnChangeLoginDisplayMode(value: string): void;
+    handleOnClickLoginButton(props: LoginProps): void;
+    handleOnChangeDisplayNameInput(value: string): void;
+    history: H.History;
 }
 
-type LoginProps = OwnProps & Pick<State, 'loginDisplayMode' | 'idInput' | 'passwordInput'>;
+type LoginProps = OwnProps & Pick<State, 'loginDisplayMode' | 'idInput' | 'passwordInput' | 'displayNameInput'>;
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
@@ -117,6 +122,15 @@ const Login: React.FC<LoginProps> = (props: LoginProps) => {
                             type="password"
                         />
                     </Grid>
+                    {props.loginDisplayMode === 'signup' && (
+                        <Grid item xs={12} className={classes.gridItem}>
+                            <TextField
+                                label="display name"
+                                value={props.displayNameInput}
+                                onChange={(e) => props.handleOnChangeDisplayNameInput(e.target.value)}
+                            />
+                        </Grid>
+                    )}
                     <Grid item xs={12} className={classes.gridItem}>
                         <IconButton onClick={(e) => props.handleOnChangeLoginDisplayMode('button')}>
                             <ArrowBackIos />
