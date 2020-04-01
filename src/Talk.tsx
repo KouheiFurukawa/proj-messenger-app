@@ -7,18 +7,20 @@ import { Dispatch } from 'redux';
 import { AppState } from '../redux/store';
 import { connect } from 'react-redux';
 import * as H from 'history';
+import { ChatBubble } from './ChatBubble';
 
 interface OwnProps {
     handleOnClickBackButton(props: TalkProps): void;
     history: H.History;
 }
 
-type TalkProps = OwnProps & Pick<State, 'chatFriend' | 'messages'>;
+type TalkProps = OwnProps & Pick<State, 'chatFriend' | 'messages' | 'loginInfo'>;
 
 const mapStateToProps = (appState: AppState) => {
     return {
         chatFriend: appState.state.chatFriend,
         messages: appState.state.messages,
+        loginInfo: appState.state.loginInfo,
     };
 };
 
@@ -48,6 +50,8 @@ const useStyles = makeStyles({
     },
     gridChatLog: {
         height: '90%',
+        width: '100%',
+        padding: '8px',
     },
     gridForm: {
         height: '10%',
@@ -79,8 +83,16 @@ const Talk: React.FC<TalkProps> = (props: TalkProps) => {
                 </IconButton>
             </Paper>
             <Grid container className={classes.gridContainer}>
-                <Grid item xs={12} className={classes.gridChatLog}>
-                    {props.messages.length > 0 && props.messages[0].text}
+                <Grid item className={classes.gridChatLog}>
+                    <Grid container spacing={2}>
+                        {props.messages.map((message) => (
+                            <ChatBubble
+                                message={message}
+                                sentByMe={message.user_from === props.loginInfo.id}
+                                key={message.send_date}
+                            />
+                        ))}
+                    </Grid>
                 </Grid>
                 <Grid item xs={12} className={classes.gridForm}>
                     <Paper className={classes.formContainer} elevation={3}>
