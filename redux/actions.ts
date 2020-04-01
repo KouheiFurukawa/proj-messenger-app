@@ -15,4 +15,7 @@ export const actions = {
     requestGetMessages: getMessages.started,
     failureGetMessages: getMessages.failed,
     successGetMessages: getMessages.done,
+    changeIdInput: actionCreator<string>('ACTIONS_CHANGE_ID_INPUT'),
+    changePasswordInput: actionCreator<string>('ACTIONS_CHANGE_PASSWORD_INPUT'),
+    changeLoginDisplayMode: actionCreator<string>('ACTIONS_CHANGE_DISPLAY_MODE'),
 };
