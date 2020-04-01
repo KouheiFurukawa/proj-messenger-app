@@ -15,6 +15,9 @@ export interface State {
         displayName: string;
         id: string;
     };
+    chatFriend: {
+        displayName: string;
+    };
 }
 
 export const initialState: State = {
@@ -30,6 +33,9 @@ export const initialState: State = {
     loginInfo: {
         displayName: '',
         id: '',
+    },
+    chatFriend: {
+        displayName: '',
     },
 };
 
@@ -63,4 +69,10 @@ export const reducer = reducerWithInitialState(initialState)
     })
     .case(actions.changeDisplayNameInput, (state, action) => {
         return { ...state, displayNameInput: action };
+    })
+    .case(actions.changeChatFriend, (state, action) => {
+        const newChatFriend = {
+            displayName: action,
+        };
+        return { ...state, chatFriend: newChatFriend };
     });

@@ -23,4 +23,5 @@ export const actions = {
     failureGetLoginInfo: getLoginInfo.failed,
     successGetLoginInfo: getLoginInfo.done,
     changeDisplayNameInput: actionCreator<string>('ACTIONS_CHANGE_DISPLAY_NAME_INPUT'),
+    changeChatFriend: actionCreator<string>('ACTIONS_CHANGE_CHAT_FRIEND'),
 };
