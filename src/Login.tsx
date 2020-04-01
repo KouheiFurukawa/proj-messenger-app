@@ -7,14 +7,19 @@ import { connect } from 'react-redux';
 import { AppState } from '../redux/store';
 import ExitToApp from '@material-ui/icons/ExitToApp';
 import ArrowBackIos from '@material-ui/icons/ArrowBackIos';
+import ApiClient from './ApiClient';
+import * as H from 'history';
 
 interface OwnProps {
     handleOnChangeIdInput(value: string): void;
     handleOnChangePasswordInput(value: string): void;
     handleOnChangeLoginDisplayMode(value: string): void;
+    handleOnClickLoginButton(props: LoginProps): void;
+    handleOnChangeDisplayNameInput(value: string): void;
+    history: H.History;
 }
 
-type LoginProps = OwnProps & Pick<State, 'loginDisplayMode' | 'idInput' | 'passwordInput'>;
+type LoginProps = OwnProps & Pick<State, 'loginDisplayMode' | 'idInput' | 'passwordInput' | 'displayNameInput'>;
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
@@ -27,12 +32,33 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
         handleOnChangeLoginDisplayMode(value: string): void {
             dispatch(actions.changeLoginDisplayMode(value));
         },
+        handleOnChangeDisplayNameInput(value: string): void {
+            dispatch(actions.changeDisplayNameInput(value));
+        },
+        handleOnClickLoginButton(props: LoginProps): void {
+            if (props.loginDisplayMode === 'login') {
+                ApiClient.login({ id: props.idInput, password: props.passwordInput })
+                    .then((response) => props.history.push('/'))
+                    .catch((err) => console.error(err));
+            } else {
+                ApiClient.signup({
+                    id: props.idInput,
+                    password: props.passwordInput,
+                    displayName: props.displayNameInput,
+                })
+                    .then((response) => props.history.push('/'))
+                    .catch((err) => console.error(err));
+            }
+        },
     };
 };
 
 const mapStateToProps = (appState: AppState) => {
     return {
         loginDisplayMode: appState.state.loginDisplayMode,
+        idInput: appState.state.idInput,
+        passwordInput: appState.state.passwordInput,
+        displayNameInput: appState.state.displayNameInput,
     };
 };
 
@@ -96,11 +122,20 @@ const Login: React.FC<LoginProps> = (props: LoginProps) => {
                             type="password"
                         />
                     </Grid>
+                    {props.loginDisplayMode === 'signup' && (
+                        <Grid item xs={12} className={classes.gridItem}>
+                            <TextField
+                                label="display name"
+                                value={props.displayNameInput}
+                                onChange={(e) => props.handleOnChangeDisplayNameInput(e.target.value)}
+                            />
+                        </Grid>
+                    )}
                     <Grid item xs={12} className={classes.gridItem}>
                         <IconButton onClick={(e) => props.handleOnChangeLoginDisplayMode('button')}>
                             <ArrowBackIos />
                         </IconButton>
-                        <IconButton>
+                        <IconButton onClick={(e) => props.handleOnClickLoginButton(props)}>
                             <ExitToApp />
                         </IconButton>
                     </Grid>

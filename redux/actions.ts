@@ -4,6 +4,7 @@ const actionCreator = actionCreatorFactory();
 
 export const getFriends = actionCreator.async<string, any[], Error>('ACTIONS_GET_FRIENDS');
 export const getMessages = actionCreator.async<{ user1: string; user2: string }, any[], Error>('ACTIONS_GET_MESSAGES');
+export const getLoginInfo = actionCreator.async<{}, any, Error>('ACTIONS_GET_LOGIN_INFO');
 
 export const actions = {
     changeTab: actionCreator<number>('ACTIONS_CHANGE_TAB'),
@@ -18,4 +19,8 @@ export const actions = {
     changeIdInput: actionCreator<string>('ACTIONS_CHANGE_ID_INPUT'),
     changePasswordInput: actionCreator<string>('ACTIONS_CHANGE_PASSWORD_INPUT'),
     changeLoginDisplayMode: actionCreator<string>('ACTIONS_CHANGE_DISPLAY_MODE'),
+    requestGetLoginInfo: getLoginInfo.started,
+    failureGetLoginInfo: getLoginInfo.failed,
+    successGetLoginInfo: getLoginInfo.done,
+    changeDisplayNameInput: actionCreator<string>('ACTIONS_CHANGE_DISPLAY_NAME_INPUT'),
 };
