@@ -27,12 +27,33 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
         handleOnChangeLoginDisplayMode(value: string): void {
             dispatch(actions.changeLoginDisplayMode(value));
         },
+        handleOnChangeDisplayNameInput(value: string): void {
+            dispatch(actions.changeDisplayNameInput(value));
+        },
+        handleOnClickLoginButton(props: LoginProps): void {
+            if (props.loginDisplayMode === 'login') {
+                ApiClient.login({ id: props.idInput, password: props.passwordInput })
+                    .then((response) => props.history.push('/'))
+                    .catch((err) => console.error(err));
+            } else {
+                ApiClient.signup({
+                    id: props.idInput,
+                    password: props.passwordInput,
+                    displayName: props.displayNameInput,
+                })
+                    .then((response) => props.history.push('/'))
+                    .catch((err) => console.error(err));
+            }
+        },
     };
 };
 
 const mapStateToProps = (appState: AppState) => {
     return {
         loginDisplayMode: appState.state.loginDisplayMode,
+        idInput: appState.state.idInput,
+        passwordInput: appState.state.passwordInput,
+        displayNameInput: appState.state.displayNameInput,
     };
 };
 
@@ -100,7 +121,7 @@ const Login: React.FC<LoginProps> = (props: LoginProps) => {
                         <IconButton onClick={(e) => props.handleOnChangeLoginDisplayMode('button')}>
                             <ArrowBackIos />
                         </IconButton>
-                        <IconButton>
+                        <IconButton onClick={(e) => props.handleOnClickLoginButton(props)}>
                             <ExitToApp />
                         </IconButton>
                     </Grid>

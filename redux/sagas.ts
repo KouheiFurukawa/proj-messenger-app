@@ -26,7 +26,22 @@ function* getMessagesHandler() {
     }
 }
 
+function* getLoginInfoHandler() {
+    while (true) {
+        const { payload } = yield take('ACTIONS_GET_LOGIN_INFO_STARTED');
+        const { result, error } = yield call(ApiClient.getLoginInfo);
+        if (result && !error) {
+            yield put(actions.successGetLoginInfo({ result, params: payload }));
+            yield put(actions.requestGetFriends(result.id));
+        } else {
+            window.location.href = 'http://localhost:8080/login';
+            yield put(actions.failureGetLoginInfo({ error, params: payload }));
+        }
+    }
+}
+
 export function* sagas() {
     yield fork(getFriendsHandler);
     yield fork(getMessagesHandler);
+    yield fork(getLoginInfoHandler);
 }

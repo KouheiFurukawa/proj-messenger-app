@@ -10,6 +10,10 @@ export interface State {
     idInput: string;
     passwordInput: string;
     loginDisplayMode: string;
+    loginInfo: {
+        displayName: string;
+        id: string;
+    };
 }
 
 export const initialState: State = {
@@ -21,6 +25,10 @@ export const initialState: State = {
     idInput: '',
     passwordInput: '',
     loginDisplayMode: 'button',
+    loginInfo: {
+        displayName: '',
+        id: '',
+    },
 };
 
 export const reducer = reducerWithInitialState(initialState)
@@ -47,4 +55,10 @@ export const reducer = reducerWithInitialState(initialState)
     })
     .case(actions.changeLoginDisplayMode, (state, action) => {
         return { ...state, loginDisplayMode: action };
+    })
+    .case(actions.successGetLoginInfo, (state, action) => {
+        return { ...state, loginInfo: { id: action.result.id, displayName: action.result.displayName } };
+    })
+    .case(actions.changeDisplayNameInput, (state, action) => {
+        return { ...state, displayNameInput: action };
     });

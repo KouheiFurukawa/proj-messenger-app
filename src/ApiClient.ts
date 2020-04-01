@@ -48,4 +48,59 @@ export default class ApiClient {
                 return { error };
             });
     }
+
+    static login(params: { id: string; password: string }) {
+        return fetch('/server/login/', {
+            method: 'POST',
+            body: JSON.stringify({ ...params }),
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                return { result: data };
+            })
+            .catch((error) => {
+                return { error };
+            });
+    }
+
+    static signup(params: { id: string; password: string; displayName: string }) {
+        return fetch('/server/signup/', {
+            method: 'POST',
+            body: JSON.stringify({ ...params }),
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                return { result: data };
+            })
+            .catch((error) => {
+                return { error };
+            });
+    }
+
+    static getLoginInfo() {
+        return fetch('/server/login_info/')
+            .then((response) => response.json())
+            .then((data) => {
+                return { result: data };
+            })
+            .catch((error) => {
+                return { error };
+            });
+    }
+
+    static logout() {
+        return fetch('/server/logout/')
+            .then((data) => {
+                return { result: data };
+            })
+            .catch((error) => {
+                return { error };
+            });
+    }
 }
