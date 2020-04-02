@@ -39,7 +39,10 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
         },
         handleOnClickLogoutButton(props: MainProps): void {
             ApiClient.logout()
-                .then((data) => props.history.push('/login'))
+                .then((data) => {
+                    props.history.push('/login');
+                    dispatch(actions.clearState());
+                })
                 .catch((err) => console.error(err));
         },
         handleOnClickFriend(name: string, props: MainProps): void {

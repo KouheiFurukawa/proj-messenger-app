@@ -52,7 +52,16 @@ export const reducer = reducerWithInitialState(initialState)
         return { ...state, userSearchInput };
     })
     .case(actions.successGetFriends, (state, action) => {
-        return { ...state, friends: action.result };
+        const friends = action.result;
+        friends.forEach((friend) => {
+            const userId = friend.user_id;
+            const friendId = friend.friend_id;
+            if (userId !== state.loginInfo.id) {
+                friend.user_id = friendId;
+                friend.friend_id = userId;
+            }
+        });
+        return { ...state, friends };
     })
     .case(actions.successGetMessages, (state, action) => {
         return { ...state, messages: action.result };
@@ -81,4 +90,7 @@ export const reducer = reducerWithInitialState(initialState)
             id: state.messages.length + 1,
         });
         return { ...state, messages: newMessages, textInput: '' };
+    })
+    .case(actions.clearState, (state) => {
+        return initialState;
     });

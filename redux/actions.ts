@@ -35,4 +35,5 @@ export const actions = {
     requestSendMessage: sendMessage.started,
     failureSendMessage: sendMessage.failed,
     successSendMessage: sendMessage.done,
+    clearState: actionCreator<void>('ACTION_CREATE_STATE'),
 };
