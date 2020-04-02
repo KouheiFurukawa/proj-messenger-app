@@ -114,4 +114,21 @@ export default class ApiClient {
                 return { error };
             });
     }
+
+    static registerFriend(params: { user_id: string; friend_id: string }) {
+        return fetch('/server/register_friend/', {
+            method: 'POST',
+            body: JSON.stringify({ ...params }),
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                return { result: data };
+            })
+            .catch((error) => {
+                return { error };
+            });
+    }
 }

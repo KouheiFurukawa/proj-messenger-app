@@ -14,6 +14,9 @@ export const getMessages = actionCreator.async<{ user1: string; user2: string },
 export const getLoginInfo = actionCreator.async<{}, any, Error>('ACTIONS_GET_LOGIN_INFO');
 export const sendMessage = actionCreator.async<ParamsSendMessage, any, Error>('ACTIONS_SEND_MESSAGE');
 export const searchUser = actionCreator.async<string, any, Error>('ACTIONS_SEARCH_USER');
+export const registerFriend = actionCreator.async<{ user_id: string; friend_id: string }, any, Error>(
+    'ACTIONS_REGISTER_FRIEND',
+);
 
 export const actions = {
     changeTab: actionCreator<number>('ACTIONS_CHANGE_TAB'),
@@ -40,4 +43,7 @@ export const actions = {
     requestSearchUser: searchUser.started,
     failureSearchUser: searchUser.failed,
     successSearchUser: searchUser.done,
+    requestRegisterFriend: registerFriend.started,
+    failureRegisterFriend: registerFriend.failed,
+    successRegisterFriend: registerFriend.done,
 };

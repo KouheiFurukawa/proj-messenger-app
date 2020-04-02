@@ -112,6 +112,17 @@ app.get('/search_user/:id', (req, res) => {
     });
 });
 
+app.post('/register_friend/', (req, res) => {
+    const query = `insert into friendship (user_id,friend_id) values ('${req.body.user_id}','${req.body.friend_id}')`;
+    connection.query(query, (err, results) => {
+        if (err) {
+            throw new Error(err);
+        } else {
+            res.json(results);
+        }
+    });
+});
+
 app.listen(3000, () => console.log('Server listening on port 3000!'));
 
 module.exports = {

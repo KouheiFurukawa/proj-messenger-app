@@ -106,9 +106,13 @@ export const reducer = reducerWithInitialState(initialState)
     })
     .case(actions.successSearchUser, (state, action) => {
         const searchResult: State['searchResult'] = {
-            id: action.result[0].id,
+            id: action.result[0].user_id,
             displayName: action.result[0].display_name,
             iconUrl: '',
         };
         return { ...state, searchResult, userSearchInput: initialState.userSearchInput };
+    })
+    .case(actions.successRegisterFriend, (state, action) => {
+        const newFriends: State['friends'] = state.friends.concat({ ...action.params, id: state.friends.length + 1 });
+        return { ...state, friends: newFriends, searchResult: initialState.searchResult };
     });

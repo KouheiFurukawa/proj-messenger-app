@@ -10,14 +10,16 @@ import { connect } from 'react-redux';
 interface OwnProps {
     handleOnChangeSearchInput(text: string): void;
     handleOnClickSearchButton(text: string): void;
+    handleOnClickRegisterFriendButton(userId: string, friendId: string): void;
 }
 
-type SearchProps = OwnProps & Pick<State, 'searchResult' | 'userSearchInput'>;
+type SearchProps = OwnProps & Pick<State, 'searchResult' | 'userSearchInput' | 'loginInfo'>;
 
 const mapStateToProps = (appState: AppState) => {
     return {
         searchResult: appState.state.searchResult,
         userSearchInput: appState.state.userSearchInput,
+        loginInfo: appState.state.loginInfo,
     };
 };
 
@@ -28,6 +30,14 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
         },
         handleOnClickSearchButton(text: string): void {
             dispatch(actions.requestSearchUser(text));
+        },
+        handleOnClickRegisterFriendButton(userId: string, friendId: string): void {
+            dispatch(
+                actions.requestRegisterFriend({
+                    user_id: userId,
+                    friend_id: friendId,
+                }),
+            );
         },
     };
 };
@@ -83,7 +93,13 @@ const Search: React.FC<SearchProps> = (props: SearchProps) => {
                             <Typography>{props.searchResult.displayName}</Typography>
                         </Grid>
                         <Grid item xs={12} className={classes.gridSearchResult}>
-                            <Button color="primary" variant="contained">
+                            <Button
+                                color="primary"
+                                variant="contained"
+                                onClick={(e) =>
+                                    props.handleOnClickRegisterFriendButton(props.loginInfo.id, props.searchResult.id)
+                                }
+                            >
                                 Become Friends
                             </Button>
                         </Grid>

@@ -64,10 +64,23 @@ function* searchUserHandler() {
     }
 }
 
+function* registerFriendHandler() {
+    while (true) {
+        const { payload } = yield take('ACTIONS_REGISTER_FRIEND_STARTED');
+        const { result, error } = yield call(ApiClient.registerFriend, payload);
+        if (result && !error) {
+            yield put(actions.successRegisterFriend({ result, params: payload }));
+        } else {
+            yield put(actions.failureRegisterFriend({ error, params: payload }));
+        }
+    }
+}
+
 export function* sagas() {
     yield fork(getFriendsHandler);
     yield fork(getMessagesHandler);
     yield fork(getLoginInfoHandler);
     yield fork(sendMessageHandler);
     yield fork(searchUserHandler);
+    yield fork(registerFriendHandler);
 }
