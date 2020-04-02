@@ -103,4 +103,15 @@ export default class ApiClient {
                 return { error };
             });
     }
+
+    static searchUser(id: string) {
+        return fetch(`/server/search_user/${id}`)
+            .then((response) => response.json())
+            .then((data) => {
+                return { result: data };
+            })
+            .catch((error) => {
+                return { error };
+            });
+    }
 }

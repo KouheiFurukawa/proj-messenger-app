@@ -19,6 +19,11 @@ export interface State {
         displayName: string;
         id: string;
     };
+    searchResult: {
+        displayName: string;
+        id: string;
+        iconUrl: string;
+    };
 }
 
 export const initialState: State = {
@@ -38,6 +43,11 @@ export const initialState: State = {
     chatFriend: {
         displayName: '',
         id: '',
+    },
+    searchResult: {
+        displayName: '',
+        id: '',
+        iconUrl: '',
     },
 };
 
@@ -93,4 +103,12 @@ export const reducer = reducerWithInitialState(initialState)
     })
     .case(actions.clearState, (state) => {
         return initialState;
+    })
+    .case(actions.successSearchUser, (state, action) => {
+        const searchResult: State['searchResult'] = {
+            id: action.result[0].id,
+            displayName: action.result[0].display_name,
+            iconUrl: '',
+        };
+        return { ...state, searchResult, userSearchInput: initialState.userSearchInput };
     });
