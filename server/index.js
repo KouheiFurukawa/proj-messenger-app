@@ -41,7 +41,7 @@ app.get('/get_friend/', (req, res) => {
 });
 
 app.get('/get_message/', (req, res) => {
-    connection.query('select * from message where (user_from = \'test1\' and user_to = \'test2\') or (user_from = \'test2\' and user_to = \'test1\')', (error, results, fields) => {
+    connection.query(`select * from message where (user_from = '${req.query.user1}' and user_to = '${req.query.user2}') or (user_from = '${req.query.user2}' and user_to = '${req.query.user1}')`, (error, results, fields) => {
         if (error) throw error;
         res.json(results);
     });
@@ -49,7 +49,8 @@ app.get('/get_message/', (req, res) => {
 
 app.post('/send_message/', (req, res) => {
     const {user_from, user_to, text, send_date} = req.body;
-    connection.query(`insert into message(user_from,user_to,text,send_date) values ('${user_from}','${user_to}','${text}',${send_date})`, (error, results, fields) => {
+    const query = `insert into message(user_from,user_to,text,send_date) values ('${user_from}','${user_to}','${text}','${send_date}')`;
+    connection.query(query, (error, results, fields) => {
         if (error) throw error;
         res.json(results);
     });

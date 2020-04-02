@@ -15,6 +15,10 @@ export interface State {
         displayName: string;
         id: string;
     };
+    chatFriend: {
+        displayName: string;
+        id: string;
+    };
 }
 
 export const initialState: State = {
@@ -28,6 +32,10 @@ export const initialState: State = {
     displayNameInput: '',
     loginDisplayMode: 'button',
     loginInfo: {
+        displayName: '',
+        id: '',
+    },
+    chatFriend: {
         displayName: '',
         id: '',
     },
@@ -63,4 +71,14 @@ export const reducer = reducerWithInitialState(initialState)
     })
     .case(actions.changeDisplayNameInput, (state, action) => {
         return { ...state, displayNameInput: action };
+    })
+    .case(actions.changeChatFriend, (state, action) => {
+        return { ...state, chatFriend: action };
+    })
+    .case(actions.successSendMessage, (state, action) => {
+        const newMessages: State['messages'] = state.messages.concat({
+            ...action.params,
+            id: state.messages.length + 1,
+        });
+        return { ...state, messages: newMessages, textInput: '' };
     });

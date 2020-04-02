@@ -28,11 +28,13 @@ const useStyles = makeStyles({
     },
     gridName: {
         display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
+        alignItems: 'center',
     },
     name: {
         fontSize: '30px',
+    },
+    paper: {
+        width: '100%',
     },
 });
 
@@ -40,7 +42,7 @@ export const User: React.FC<UserProps> = (props: UserProps) => {
     const classes = useStyles();
 
     return (
-        <Paper>
+        <Paper className={classes.paper}>
             <Grid container className={classes.gridContainer}>
                 <Grid item className={classes.gridItem}>
                     <Avatar className={classes.avatar}>?</Avatar>
