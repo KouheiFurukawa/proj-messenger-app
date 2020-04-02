@@ -17,6 +17,7 @@ export interface State {
     };
     chatFriend: {
         displayName: string;
+        id: string;
     };
 }
 
@@ -36,6 +37,7 @@ export const initialState: State = {
     },
     chatFriend: {
         displayName: '',
+        id: '',
     },
 };
 
@@ -71,8 +73,12 @@ export const reducer = reducerWithInitialState(initialState)
         return { ...state, displayNameInput: action };
     })
     .case(actions.changeChatFriend, (state, action) => {
-        const newChatFriend = {
-            displayName: action,
-        };
-        return { ...state, chatFriend: newChatFriend };
+        return { ...state, chatFriend: action };
+    })
+    .case(actions.successSendMessage, (state, action) => {
+        const newMessages: State['messages'] = state.messages.concat({
+            ...action.params,
+            id: state.messages.length + 1,
+        });
+        return { ...state, messages: newMessages, textInput: '' };
     });

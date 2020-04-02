@@ -49,7 +49,8 @@ app.get('/get_message/', (req, res) => {
 
 app.post('/send_message/', (req, res) => {
     const {user_from, user_to, text, send_date} = req.body;
-    connection.query(`insert into message(user_from,user_to,text,send_date) values ('${user_from}','${user_to}','${text}',${send_date})`, (error, results, fields) => {
+    const query = `insert into message(user_from,user_to,text,send_date) values ('${user_from}','${user_to}','${text}','${send_date}')`;
+    connection.query(query, (error, results, fields) => {
         if (error) throw error;
         res.json(results);
     });

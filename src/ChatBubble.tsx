@@ -20,8 +20,14 @@ const useStyles = makeStyles({
     },
     bubble: {
         padding: '5px 8px',
-        borderRadius: '10px',
+        borderRadius: '10px 10px 10px 2px',
         backgroundColor: colors.grey[300],
+    },
+    bubbleRight: {
+        padding: '5px 8px',
+        borderRadius: '10px 10px 2px 10px',
+        backgroundColor: colors.blue[500],
+        color: 'white',
     },
     timestamp: {
         fontSize: '7px',
@@ -40,7 +46,7 @@ export const ChatBubble: React.FC<ChatBubbleProps> = (props: ChatBubbleProps) =>
                         <Moment date={new Date(props.message.send_date)} format="MM/DD HH:mm" />
                     </Grid>
                     <Grid item className={classes.bubbleContainer}>
-                        <Paper className={classes.bubble}>
+                        <Paper className={classes.bubbleRight}>
                             <Typography>{props.message.text}</Typography>
                         </Paper>
                     </Grid>

@@ -8,19 +8,24 @@ import { AppState } from '../redux/store';
 import { connect } from 'react-redux';
 import * as H from 'history';
 import { ChatBubble } from './ChatBubble';
+import { actions } from '../redux/actions';
+import * as moment from 'moment';
 
 interface OwnProps {
     handleOnClickBackButton(props: TalkProps): void;
+    handleUpdateTextInput(text: string): void;
+    handleSendMessage(userFrom: string, userTo: string, text: string, sendDate: Date): void;
     history: H.History;
 }
 
-type TalkProps = OwnProps & Pick<State, 'chatFriend' | 'messages' | 'loginInfo'>;
+type TalkProps = OwnProps & Pick<State, 'chatFriend' | 'messages' | 'loginInfo' | 'textInput'>;
 
 const mapStateToProps = (appState: AppState) => {
     return {
         chatFriend: appState.state.chatFriend,
         messages: appState.state.messages,
         loginInfo: appState.state.loginInfo,
+        textInput: appState.state.textInput,
     };
 };
 
@@ -28,6 +33,19 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
         handleOnClickBackButton(props: TalkProps): void {
             props.history.push('/');
+        },
+        handleUpdateTextInput(text: string): void {
+            dispatch(actions.updateTextInput(text));
+        },
+        handleSendMessage(userFrom: string, userTo: string, text: string, sendDate: Date): void {
+            dispatch(
+                actions.requestSendMessage({
+                    text,
+                    user_to: userTo,
+                    user_from: userFrom,
+                    send_date: moment(sendDate).format('YYYY-MM-DD HH:mm:ss'),
+                }),
+            );
         },
     };
 };
@@ -96,8 +114,22 @@ const Talk: React.FC<TalkProps> = (props: TalkProps) => {
                 </Grid>
                 <Grid item xs={12} className={classes.gridForm}>
                     <Paper className={classes.formContainer} elevation={3}>
-                        <TextField variant="outlined" label="message" />
-                        <IconButton>
+                        <TextField
+                            variant="outlined"
+                            label="message"
+                            value={props.textInput}
+                            onChange={(e) => props.handleUpdateTextInput(e.target.value)}
+                        />
+                        <IconButton
+                            onClick={(e) =>
+                                props.handleSendMessage(
+                                    props.loginInfo.id,
+                                    props.chatFriend.id,
+                                    props.textInput,
+                                    new Date(),
+                                )
+                            }
+                        >
                             <Send />
                         </IconButton>
                     </Paper>

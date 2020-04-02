@@ -46,7 +46,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
             if (name !== props.chatFriend.displayName) {
                 dispatch(actions.requestGetMessages({ user1: props.loginInfo.id, user2: name }));
             }
-            dispatch(actions.changeChatFriend(name));
+            dispatch(actions.changeChatFriend({ id: name, displayName: name }));
             props.history.push('/talk');
         },
     };

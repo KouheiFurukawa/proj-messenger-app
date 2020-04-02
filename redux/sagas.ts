@@ -40,8 +40,21 @@ function* getLoginInfoHandler() {
     }
 }
 
+function* sendMessageHandler() {
+    while (true) {
+        const { payload } = yield take('ACTIONS_SEND_MESSAGE_STARTED');
+        const { result, error } = yield call(ApiClient.sendMessage, payload);
+        if (result && !error) {
+            yield put(actions.successSendMessage({ result, params: payload }));
+        } else {
+            yield put(actions.failureSendMessage({ error, params: payload }));
+        }
+    }
+}
+
 export function* sagas() {
     yield fork(getFriendsHandler);
     yield fork(getMessagesHandler);
     yield fork(getLoginInfoHandler);
+    yield fork(sendMessageHandler);
 }
