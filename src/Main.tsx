@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Search from '@material-ui/icons/Search';
+import SearchIcon from '@material-ui/icons/Search';
 import Chat from '@material-ui/icons/Chat';
 import PeopleAlt from '@material-ui/icons/PeopleAlt';
 import Settings from '@material-ui/icons/Settings';
@@ -12,6 +12,7 @@ import { User } from './User';
 import { AppState } from '../redux/store';
 import ApiClient from './ApiClient';
 import * as H from 'history';
+import Search from './Search';
 
 interface OwnProps {
     handleOnChangeTab(value: number): void;
@@ -39,7 +40,10 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
         },
         handleOnClickLogoutButton(props: MainProps): void {
             ApiClient.logout()
-                .then((data) => props.history.push('/login'))
+                .then((data) => {
+                    props.history.push('/login');
+                    dispatch(actions.clearState());
+                })
                 .catch((err) => console.error(err));
         },
         handleOnClickFriend(name: string, props: MainProps): void {
@@ -113,6 +117,7 @@ const Main: React.FC<MainProps> = (props: MainProps) => {
                 </span>
             </Paper>
             <div className={classes.main}>
+                {props.tabValue === 0 && <Search />}
                 {props.tabValue === 1 &&
                     props.friends.map((friend) => {
                         return (
@@ -153,7 +158,12 @@ const Main: React.FC<MainProps> = (props: MainProps) => {
                     value={props.tabValue}
                     onChange={(e, newVal) => props.handleOnChangeTab(newVal)}
                 >
-                    <Tab icon={<Search style={{ fontSize: 25 }} />} label="Search" className={classes.tab} value={0} />
+                    <Tab
+                        icon={<SearchIcon style={{ fontSize: 25 }} />}
+                        label="Search"
+                        className={classes.tab}
+                        value={0}
+                    />
                     <Tab
                         icon={<PeopleAlt style={{ fontSize: 25 }} />}
                         label="Friends"
