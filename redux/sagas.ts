@@ -1,6 +1,63 @@
-import { call, put, fork, take } from 'redux-saga/effects';
+import { call, fork, put, take, all } from 'redux-saga/effects';
+import { eventChannel } from 'redux-saga';
 import { actions } from './actions';
 import ApiClient from '../src/ApiClient';
+import io from 'socket.io-client';
+
+function createSocketConnection(id: string) {
+    const socket = io('http://localhost:3000');
+
+    return new Promise((resolve) => {
+        socket.on('connect', () => {
+            socket.emit('setUserName', id);
+            resolve(socket);
+        });
+    });
+}
+
+function subscribe(socket: any) {
+    return eventChannel((emit) => {
+        const syncMessage = async (message: any) => {
+            emit(actions.successSyncMessage({ result: message, params: message }));
+        };
+
+        socket.on('syncMessage:receive', syncMessage);
+
+        return () => {
+            socket.off('syncMessage:receive', syncMessage);
+        };
+    });
+}
+
+function* initSocketHandler() {
+    while (true) {
+        try {
+            const { payload } = yield take('ACTIONS_INIT_SOCKET');
+            const socket = yield call(createSocketConnection, payload);
+            yield fork(subscribeHandler, socket);
+            yield fork(syncMessageHandler, socket);
+        } catch (err) {
+            throw err;
+        }
+    }
+}
+
+function* subscribeHandler(socket: any) {
+    const channel = yield call(subscribe, socket);
+
+    while (true) {
+        const action = yield take(channel);
+
+        yield put(action);
+    }
+}
+
+function* syncMessageHandler(socket: any) {
+    while (true) {
+        const { payload } = yield take('ACTIONS_SYNC_MESSAGE_STARTED');
+        socket.emit('updateMessage', payload);
+    }
+}
 
 function* getFriendsHandler() {
     while (true) {
@@ -46,6 +103,7 @@ function* sendMessageHandler() {
         const { result, error } = yield call(ApiClient.sendMessage, payload);
         if (result && !error) {
             yield put(actions.successSendMessage({ result, params: payload }));
+            yield put(actions.requestSyncMessage(payload));
         } else {
             yield put(actions.failureSendMessage({ error, params: payload }));
         }
@@ -83,4 +141,5 @@ export function* sagas() {
     yield fork(sendMessageHandler);
     yield fork(searchUserHandler);
     yield fork(registerFriendHandler);
+    yield fork(initSocketHandler);
 }

@@ -115,4 +115,11 @@ export const reducer = reducerWithInitialState(initialState)
     .case(actions.successRegisterFriend, (state, action) => {
         const newFriends: State['friends'] = state.friends.concat({ ...action.params, id: state.friends.length + 1 });
         return { ...state, friends: newFriends, searchResult: initialState.searchResult };
+    })
+    .case(actions.successSyncMessage, (state, action) => {
+        const newMessages: State['messages'] = state.messages.concat({
+            ...action.params,
+            id: state.messages.length + 1,
+        });
+        return { ...state, messages: newMessages };
     });

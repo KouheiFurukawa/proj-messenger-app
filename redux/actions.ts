@@ -17,6 +17,7 @@ export const searchUser = actionCreator.async<string, any, Error>('ACTIONS_SEARC
 export const registerFriend = actionCreator.async<{ user_id: string; friend_id: string }, any, Error>(
     'ACTIONS_REGISTER_FRIEND',
 );
+export const syncMessage = actionCreator.async<any, any, Error>('ACTIONS_SYNC_MESSAGE');
 
 export const actions = {
     changeTab: actionCreator<number>('ACTIONS_CHANGE_TAB'),
@@ -46,4 +47,8 @@ export const actions = {
     requestRegisterFriend: registerFriend.started,
     failureRegisterFriend: registerFriend.failed,
     successRegisterFriend: registerFriend.done,
+    requestSyncMessage: syncMessage.started,
+    failureSyncMessage: syncMessage.failed,
+    successSyncMessage: syncMessage.done,
+    initSocket: actionCreator<string>('ACTIONS_INIT_SOCKET'),
 };

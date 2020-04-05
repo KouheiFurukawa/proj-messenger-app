@@ -18,12 +18,28 @@ app.use(
     })
 );
 
+const server = app.listen(3000, () => console.log('Server listening on port 3000!'));
+
 const mysql = require('mysql');
 const connection = mysql.createConnection({
     user: 'root', // e.g. 'my-db-user'
     password: '', // e.g. 'my-db-password'
     database: 'MessengerApp', // e.g. 'my-database'
-    socketPath: '/cloudsql/ardent-justice-273102:us-central1:messenger-app',
+    // socketPath: '/cloudsql/ardent-justice-273102:us-central1:messenger-app',
+    host: 'localhost',
+});
+
+const io = require('socket.io').listen(server);
+const clients = {};
+io.origins('*:*');
+
+io.on('connection', (socket) => {
+    socket.on('setUserName', (param) => {
+        clients[param] = socket.id;
+    });
+    socket.on('updateMessage', async (params) => {
+        io.to(clients[params.user_to]).emit('syncMessage:receive', params);
+    })
 });
 
 app.get('/server/get_user/', (req, res) => {
@@ -122,8 +138,6 @@ app.post('/server/register_friend/', (req, res) => {
         }
     });
 });
-
-app.listen(process.env.PORT || 3000, () => console.log('Server listening on port 3000!'));
 
 module.exports = {
     path: '/server',

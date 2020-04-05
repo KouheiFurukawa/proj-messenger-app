@@ -5,7 +5,7 @@ import ArrowBackIos from '@material-ui/icons/ArrowBackIos';
 import { State } from '../redux/reducer';
 import { Dispatch } from 'redux';
 import { AppState } from '../redux/store';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import * as H from 'history';
 import { ChatBubble } from './ChatBubble';
 import { actions } from '../redux/actions';
@@ -70,6 +70,7 @@ const useStyles = makeStyles({
         height: '90%',
         width: '100%',
         padding: '8px',
+        overflowY: 'scroll',
     },
     gridForm: {
         height: '10%',
@@ -78,10 +79,11 @@ const useStyles = makeStyles({
         width: '250px',
     },
     formContainer: {
-        height: '100%',
+        height: '80px',
         width: '100%',
         borderRadius: '0',
         display: 'flex',
+        position: 'fixed',
         justifyContent: 'center',
         alignItems: 'center',
     },
@@ -92,6 +94,13 @@ const useStyles = makeStyles({
 
 const Talk: React.FC<TalkProps> = (props: TalkProps) => {
     const classes = useStyles();
+
+    React.useEffect(() => {
+        dispatch(actions.initSocket(props.loginInfo.id));
+    }, []);
+
+    const dispatch = useDispatch();
+
     return (
         <div>
             <Paper className={classes.header}>
