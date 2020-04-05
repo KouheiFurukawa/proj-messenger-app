@@ -70,6 +70,7 @@ const useStyles = makeStyles({
         height: '90%',
         width: '100%',
         padding: '8px',
+        overflowY: 'scroll',
     },
     gridForm: {
         height: '10%',
@@ -78,10 +79,11 @@ const useStyles = makeStyles({
         width: '250px',
     },
     formContainer: {
-        height: '100%',
+        height: '80px',
         width: '100%',
         borderRadius: '0',
         display: 'flex',
+        position: 'fixed',
         justifyContent: 'center',
         alignItems: 'center',
     },
