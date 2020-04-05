@@ -5,7 +5,7 @@ import ArrowBackIos from '@material-ui/icons/ArrowBackIos';
 import { State } from '../redux/reducer';
 import { Dispatch } from 'redux';
 import { AppState } from '../redux/store';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import * as H from 'history';
 import { ChatBubble } from './ChatBubble';
 import { actions } from '../redux/actions';
@@ -94,6 +94,13 @@ const useStyles = makeStyles({
 
 const Talk: React.FC<TalkProps> = (props: TalkProps) => {
     const classes = useStyles();
+
+    React.useEffect(() => {
+        dispatch(actions.initSocket(props.loginInfo.id));
+    }, []);
+
+    const dispatch = useDispatch();
+
     return (
         <div>
             <Paper className={classes.header}>
