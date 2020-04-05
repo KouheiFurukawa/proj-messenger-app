@@ -34,7 +34,7 @@ function* getLoginInfoHandler() {
             yield put(actions.successGetLoginInfo({ result, params: payload }));
             yield put(actions.requestGetFriends(result.id));
         } else {
-            window.location.href = 'http://localhost:8080/login';
+            window.location.href = `${window.location.href}login`;
             yield put(actions.failureGetLoginInfo({ error, params: payload }));
         }
     }
