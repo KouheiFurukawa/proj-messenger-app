@@ -32,6 +32,7 @@ const mapStateToProps = (appState: AppState) => {
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
         handleOnClickBackButton(props: TalkProps): void {
+            localStorage.clear();
             props.history.push('/');
         },
         handleUpdateTextInput(text: string): void {
@@ -96,6 +97,15 @@ const Talk: React.FC<TalkProps> = (props: TalkProps) => {
     const classes = useStyles();
 
     React.useEffect(() => {
+        if (!props.chatFriend.id) {
+            const chatFriendString = localStorage.getItem('chatFriend');
+            if (chatFriendString) {
+                dispatch(actions.requestRestoreMessage(JSON.parse(chatFriendString)));
+            }
+        } else {
+            localStorage.setItem('loginInfo', JSON.stringify(props.loginInfo));
+            localStorage.setItem('chatFriend', JSON.stringify(props.chatFriend));
+        }
         dispatch(actions.initSocket(props.loginInfo.id));
     }, []);
 

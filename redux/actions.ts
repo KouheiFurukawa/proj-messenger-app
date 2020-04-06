@@ -18,6 +18,9 @@ export const registerFriend = actionCreator.async<{ user_id: string; friend_id: 
     'ACTIONS_REGISTER_FRIEND',
 );
 export const syncMessage = actionCreator.async<any, any, Error>('ACTIONS_SYNC_MESSAGE');
+export const restoreMessage = actionCreator.async<{ id: string; displayName: string }, any, Error>(
+    'ACTIONS_RESTORE_MESSAGE',
+);
 
 export const actions = {
     changeTab: actionCreator<number>('ACTIONS_CHANGE_TAB'),
@@ -51,4 +54,5 @@ export const actions = {
     failureSyncMessage: syncMessage.failed,
     successSyncMessage: syncMessage.done,
     initSocket: actionCreator<string>('ACTIONS_INIT_SOCKET'),
+    requestRestoreMessage: restoreMessage.started,
 };

@@ -144,6 +144,19 @@ function* registerFriendHandler() {
     }
 }
 
+function* restoreMessage() {
+    while (true) {
+        const { payload } = yield take('ACTIONS_RESTORE_MESSAGE_STARTED');
+        const { result, error } = yield call(ApiClient.getLoginInfo);
+        if (result && !error) {
+            yield put(actions.successGetLoginInfo({ result, params: payload }));
+            yield put(actions.requestGetFriends(result.id));
+            yield put(actions.requestGetMessages({ user1: result.id, user2: payload.id }));
+            yield put(actions.changeChatFriend(payload));
+        }
+    }
+}
+
 export function* sagas() {
     yield fork(getFriendsHandler);
     yield fork(getMessagesHandler);
@@ -152,4 +165,5 @@ export function* sagas() {
     yield fork(searchUserHandler);
     yield fork(registerFriendHandler);
     yield fork(initSocketHandler);
+    yield fork(restoreMessage);
 }
