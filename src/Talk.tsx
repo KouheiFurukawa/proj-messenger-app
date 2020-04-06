@@ -110,7 +110,7 @@ const Talk: React.FC<TalkProps> = (props: TalkProps) => {
                 </IconButton>
             </Paper>
             <Grid container className={classes.gridContainer}>
-                <Grid item className={classes.gridChatLog}>
+                <Grid item className={classes.gridChatLog} id="grid-chat-log">
                     <Grid container spacing={2}>
                         {props.messages.map((message) => (
                             <ChatBubble

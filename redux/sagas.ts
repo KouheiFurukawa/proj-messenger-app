@@ -19,6 +19,11 @@ function subscribe(socket: any) {
     return eventChannel((emit) => {
         const syncMessage = async (message: any) => {
             emit(actions.successSyncMessage({ result: message, params: message }));
+            const el = document.getElementById('grid-chat-log');
+            if (el) {
+                const bottom = el ? el.scrollHeight - el.clientHeight : 0;
+                el.scroll(0, bottom);
+            }
         };
 
         socket.on('syncMessage:receive', syncMessage);
@@ -104,6 +109,11 @@ function* sendMessageHandler() {
         if (result && !error) {
             yield put(actions.successSendMessage({ result, params: payload }));
             yield put(actions.requestSyncMessage(payload));
+            const el = document.getElementById('grid-chat-log');
+            if (el) {
+                const bottom = el ? el.scrollHeight - el.clientHeight : 0;
+                el.scroll(0, bottom);
+            }
         } else {
             yield put(actions.failureSendMessage({ error, params: payload }));
         }
