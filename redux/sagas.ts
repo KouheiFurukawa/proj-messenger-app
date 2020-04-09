@@ -6,6 +6,7 @@ import io from 'socket.io-client';
 
 function createSocketConnection(id: string) {
     const socket = io('http://localhost:3000');
+    // const socket = io('https://server-dot-ardent-justice-273102.appspot.com');
 
     return new Promise((resolve) => {
         socket.on('connect', () => {
