@@ -66,9 +66,10 @@ const useStyles = makeStyles({
     },
     gridContainer: {
         height: '93vh',
+        paddingBottom: '80px',
     },
     gridChatLog: {
-        height: '90%',
+        height: '100%',
         width: '100%',
         padding: '8px',
         overflowY: 'scroll',
@@ -97,6 +98,13 @@ const Talk: React.FC<TalkProps> = (props: TalkProps) => {
     const classes = useStyles();
 
     React.useEffect(() => {
+        const gridContainer: HTMLElement | null = document.getElementById('grid-container');
+        if (gridContainer) {
+            gridContainer.style.height = `calc(${window.innerHeight}px - 7vh)`;
+            window.addEventListener('resize', () => {
+                gridContainer.style.height = `calc(${window.innerHeight}px - 7vh)`;
+            });
+        }
         if (!props.chatFriend.id) {
             const chatFriendString = localStorage.getItem('chatFriend');
             if (chatFriendString) {
@@ -119,7 +127,7 @@ const Talk: React.FC<TalkProps> = (props: TalkProps) => {
                     <ArrowBackIos />
                 </IconButton>
             </Paper>
-            <Grid container className={classes.gridContainer}>
+            <Grid container className={classes.gridContainer} id="grid-container">
                 <Grid item className={classes.gridChatLog} id="grid-chat-log">
                     <Grid container spacing={2}>
                         {props.messages.map((message) => (
