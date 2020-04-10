@@ -135,6 +135,8 @@ const Talk: React.FC<TalkProps> = (props: TalkProps) => {
                                 message={message}
                                 sentByMe={message.user_from === props.loginInfo.id}
                                 key={message.send_date}
+                                userIcon={props.loginInfo.iconUrl}
+                                friendIcon={props.chatFriend.iconUrl}
                             />
                         ))}
                     </Grid>

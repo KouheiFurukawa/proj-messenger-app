@@ -5,6 +5,8 @@ import Moment from 'react-moment';
 interface OwnProps {
     message: any;
     sentByMe: boolean;
+    userIcon: string;
+    friendIcon: string;
 }
 
 type ChatBubbleProps = OwnProps;
@@ -51,13 +53,13 @@ export const ChatBubble: React.FC<ChatBubbleProps> = (props: ChatBubbleProps) =>
                         </Paper>
                     </Grid>
                     <Grid item>
-                        <Avatar>?</Avatar>
+                        <Avatar src={props.userIcon} alt="?" />
                     </Grid>
                 </Grid>
             ) : (
                 <Grid container>
                     <Grid item>
-                        <Avatar>?</Avatar>
+                        <Avatar src={props.friendIcon} alt="?" />
                     </Grid>
                     <Grid item className={classes.bubbleContainer}>
                         <Paper className={classes.bubble}>

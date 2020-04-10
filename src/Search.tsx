@@ -10,7 +10,12 @@ import { connect } from 'react-redux';
 interface OwnProps {
     handleOnChangeSearchInput(text: string): void;
     handleOnClickSearchButton(text: string): void;
-    handleOnClickRegisterFriendButton(userId: string, friendId: string): void;
+    handleOnClickRegisterFriendButton(
+        userId: string,
+        friendId: string,
+        userIconUrl: string,
+        friendIconUrl: string,
+    ): void;
 }
 
 type SearchProps = OwnProps & Pick<State, 'searchResult' | 'userSearchInput' | 'loginInfo'>;
@@ -31,11 +36,18 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
         handleOnClickSearchButton(text: string): void {
             dispatch(actions.requestSearchUser(text));
         },
-        handleOnClickRegisterFriendButton(userId: string, friendId: string): void {
+        handleOnClickRegisterFriendButton(
+            userId: string,
+            friendId: string,
+            userIconUrl: string,
+            friendIconUrl: string,
+        ): void {
             dispatch(
                 actions.requestRegisterFriend({
                     user_id: userId,
                     friend_id: friendId,
+                    user_icon_url: userIconUrl,
+                    friend_icon_url: friendIconUrl,
                 }),
             );
         },
@@ -87,7 +99,7 @@ const Search: React.FC<SearchProps> = (props: SearchProps) => {
                 {props.searchResult.id && (
                     <Grid container spacing={2}>
                         <Grid item xs={12} className={classes.gridSearchResult}>
-                            <Avatar className={classes.avatar}>?</Avatar>
+                            <Avatar className={classes.avatar} src={props.searchResult.iconUrl} alt="?" />
                         </Grid>
                         <Grid item xs={12} className={classes.gridSearchResult}>
                             <Typography>{props.searchResult.displayName}</Typography>
@@ -97,7 +109,12 @@ const Search: React.FC<SearchProps> = (props: SearchProps) => {
                                 color="primary"
                                 variant="contained"
                                 onClick={(e) =>
-                                    props.handleOnClickRegisterFriendButton(props.loginInfo.id, props.searchResult.id)
+                                    props.handleOnClickRegisterFriendButton(
+                                        props.loginInfo.id,
+                                        props.searchResult.id,
+                                        props.loginInfo.iconUrl,
+                                        props.searchResult.iconUrl,
+                                    )
                                 }
                             >
                                 Become Friends

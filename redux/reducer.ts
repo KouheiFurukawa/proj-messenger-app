@@ -19,6 +19,7 @@ export interface State {
     chatFriend: {
         displayName: string;
         id: string;
+        iconUrl: string;
     };
     searchResult: {
         displayName: string;
@@ -45,6 +46,7 @@ export const initialState: State = {
     chatFriend: {
         displayName: '',
         id: '',
+        iconUrl: '',
     },
     searchResult: {
         displayName: '',
@@ -68,9 +70,13 @@ export const reducer = reducerWithInitialState(initialState)
         friends.forEach((friend) => {
             const userId = friend.user_id;
             const friendId = friend.friend_id;
+            const userIconUrl = friend.user_icon_url;
+            const friendIconUrl = friend.friend_icon_url;
             if (userId !== state.loginInfo.id) {
                 friend.user_id = friendId;
                 friend.friend_id = userId;
+                friend.user_icon_url = friendIconUrl;
+                friend.friend_icon_url = userIconUrl;
             }
         });
         return { ...state, friends };
@@ -88,7 +94,10 @@ export const reducer = reducerWithInitialState(initialState)
         return { ...state, loginDisplayMode: action };
     })
     .case(actions.successGetLoginInfo, (state, action) => {
-        return { ...state, loginInfo: { id: action.result.id, displayName: action.result.displayName } };
+        return {
+            ...state,
+            loginInfo: { id: action.result.id, displayName: action.result.displayName, iconUrl: action.result.iconUrl },
+        };
     })
     .case(actions.changeDisplayNameInput, (state, action) => {
         return { ...state, displayNameInput: action };
@@ -110,7 +119,7 @@ export const reducer = reducerWithInitialState(initialState)
         const searchResult: State['searchResult'] = {
             id: action.result[0].user_id,
             displayName: action.result[0].display_name,
-            iconUrl: '',
+            iconUrl: action.result[0].icon_url,
         };
         return { ...state, searchResult, userSearchInput: initialState.userSearchInput };
     })
@@ -126,7 +135,6 @@ export const reducer = reducerWithInitialState(initialState)
         return { ...state, messages: newMessages };
     })
     .case(actions.successUpdateIcon, (state, action) => {
-        console.log(action.result);
         const newLoginInfo = { ...state.loginInfo, iconUrl: action.result };
         return { ...state, loginInfo: newLoginInfo };
     });

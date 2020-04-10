@@ -68,7 +68,7 @@ function* syncMessageHandler(socket: any) {
 function* getFriendsHandler() {
     while (true) {
         const { payload } = yield take('ACTIONS_GET_FRIENDS_STARTED');
-        const { result, error } = yield call(ApiClient.getFriend);
+        const { result, error } = yield call(ApiClient.getFriend, payload);
         if (result && !error) {
             yield put(actions.successGetFriends({ result, params: '' }));
         } else {

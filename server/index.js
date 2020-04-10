@@ -90,8 +90,8 @@ app.get('/server/get_user/', (req, res) => {
     });
 });
 
-app.get('/server/get_friend/', (req, res) => {
-    connection.query('select * from friendship where(user_id = \'test1\' or friend_id = \'test1\')', (error, results, fields) => {
+app.get('/server/get_friend/:id', (req, res) => {
+    connection.query(`select * from friendship where(user_id = '${req.params.id}' or friend_id = '${req.params.id}')`, (error, results, fields) => {
         if (error) throw error;
         res.json(results);
     });
@@ -122,6 +122,7 @@ app.post('/server/login/', (req, res, next) => {
         if (userId) {
             req.session.userId = userId;
             req.session.displayName = results[0].display_name;
+            req.session.iconUrl = results[0].icon_url;
             res.redirect('/');
         } else {
             throw new Error(err);
@@ -140,6 +141,7 @@ app.post('/server/signup/', (req, res, next) => {
         } else {
             req.session.userId = id;
             req.session.displayName = displayName;
+            req.session.iconUrl = '';
             res.redirect('/login');
         }
     });
@@ -147,7 +149,7 @@ app.post('/server/signup/', (req, res, next) => {
 
 app.get('/server/login_info/', (req, res) => {
     if (req.session.userId) {
-        res.json({id: req.session.userId, displayName: req.session.displayName})
+        res.json({id: req.session.userId, displayName: req.session.displayName, iconUrl: req.session.iconUrl})
     } else {
         throw new Error('Login info not found');
     }
@@ -170,7 +172,7 @@ app.get('/server/search_user/:id', (req, res) => {
 });
 
 app.post('/server/register_friend/', (req, res) => {
-    const query = `insert into friendship (user_id,friend_id) values ('${req.body.user_id}','${req.body.friend_id}')`;
+    const query = `insert into friendship (user_id,friend_id,user_icon_url,friend_icon_url) values ('${req.body.user_id}','${req.body.friend_id}','${req.body.user_icon_url}','${req.body.friend_icon_url}')`;
     connection.query(query, (err, results) => {
         if (err) {
             throw new Error(err);

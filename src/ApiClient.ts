@@ -10,8 +10,8 @@ export default class ApiClient {
             });
     }
 
-    static getFriend() {
-        return fetch('/server/get_friend/')
+    static getFriend(id: string) {
+        return fetch(`/server/get_friend/${id}`)
             .then((response) => response.json())
             .then((data) => {
                 return { result: data };
@@ -115,7 +115,12 @@ export default class ApiClient {
             });
     }
 
-    static registerFriend(params: { user_id: string; friend_id: string }) {
+    static registerFriend(params: {
+        user_id: string;
+        friend_id: string;
+        user_icon_url: string;
+        friend_icon_url: string;
+    }) {
         return fetch('/server/register_friend/', {
             method: 'POST',
             body: JSON.stringify({ ...params }),

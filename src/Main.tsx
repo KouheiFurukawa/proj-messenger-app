@@ -3,21 +3,20 @@ import SearchIcon from '@material-ui/icons/Search';
 import Chat from '@material-ui/icons/Chat';
 import PeopleAlt from '@material-ui/icons/PeopleAlt';
 import SettingsIcon from '@material-ui/icons/Settings';
-import { Button, ButtonBase, Grid, Paper, Tabs, Tab, Typography, makeStyles, colors } from '@material-ui/core';
+import { ButtonBase, Paper, Tabs, Tab, makeStyles, colors } from '@material-ui/core';
 import { State } from '../redux/reducer';
 import { connect, useDispatch } from 'react-redux';
 import { Dispatch } from 'redux';
 import { actions } from '../redux/actions';
 import { User } from './User';
 import { AppState } from '../redux/store';
-import ApiClient from './ApiClient';
 import * as H from 'history';
 import Search from './Search';
 import Settings from './Settings';
 
 interface OwnProps {
     handleOnChangeTab(value: number): void;
-    handleOnClickFriend(name: string, props: MainProps): void;
+    handleOnClickFriend(friend: State['chatFriend'], props: MainProps): void;
     history: H.History;
 }
 
@@ -38,11 +37,11 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
         handleOnChangeTab(value: number): void {
             dispatch(actions.changeTab(value));
         },
-        handleOnClickFriend(name: string, props: MainProps): void {
-            if (name !== props.chatFriend.displayName) {
+        handleOnClickFriend(friend: State['chatFriend'], props: MainProps): void {
+            if (friend.displayName !== props.chatFriend.displayName) {
                 dispatch(actions.requestGetMessages({ user1: props.loginInfo.id, user2: name }));
             }
-            dispatch(actions.changeChatFriend({ id: name, displayName: name }));
+            dispatch(actions.changeChatFriend(friend));
             props.history.push('/talk');
         },
     };
@@ -107,11 +106,20 @@ const Main: React.FC<MainProps> = (props: MainProps) => {
                     props.friends.map((friend) => {
                         return (
                             <ButtonBase
-                                onClick={(e) => props.handleOnClickFriend(friend.friend_id, props)}
+                                onClick={(e) =>
+                                    props.handleOnClickFriend(
+                                        {
+                                            id: friend.friend_id,
+                                            displayName: friend.friend_id,
+                                            iconUrl: friend.friend_icon_url,
+                                        },
+                                        props,
+                                    )
+                                }
                                 key={friend.id}
                                 className={classes.buttonBase}
                             >
-                                <User user={{ displayName: friend.friend_id, iconUrl: '' }} />
+                                <User user={{ displayName: friend.friend_id, iconUrl: friend.friend_icon_url }} />
                             </ButtonBase>
                         );
                     })}
