@@ -14,6 +14,7 @@ export interface State {
     loginInfo: {
         displayName: string;
         id: string;
+        iconUrl: string;
     };
     chatFriend: {
         displayName: string;
@@ -39,6 +40,7 @@ export const initialState: State = {
     loginInfo: {
         displayName: '',
         id: '',
+        iconUrl: '',
     },
     chatFriend: {
         displayName: '',
@@ -122,4 +124,9 @@ export const reducer = reducerWithInitialState(initialState)
             id: state.messages.length + 1,
         });
         return { ...state, messages: newMessages };
+    })
+    .case(actions.successUpdateIcon, (state, action) => {
+        console.log(action.result);
+        const newLoginInfo = { ...state.loginInfo, iconUrl: action.result };
+        return { ...state, loginInfo: newLoginInfo };
     });

@@ -131,4 +131,20 @@ export default class ApiClient {
                 return { error };
             });
     }
+
+    static uploadImage(params: { file: File; id: string }) {
+        const uploadImage = new FormData();
+        uploadImage.append('file', params.file);
+        return fetch('/server/upload_image/', {
+            method: 'POST',
+            body: uploadImage,
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                return { result: data };
+            })
+            .catch((error) => {
+                return { error };
+            });
+    }
 }

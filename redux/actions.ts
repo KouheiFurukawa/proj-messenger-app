@@ -21,6 +21,7 @@ export const syncMessage = actionCreator.async<any, any, Error>('ACTIONS_SYNC_ME
 export const restoreMessage = actionCreator.async<{ id: string; displayName: string }, any, Error>(
     'ACTIONS_RESTORE_MESSAGE',
 );
+export const updateIcon = actionCreator.async<{ file: File; id: string }, any, Error>('ACTIONS_UPDATE_ICON');
 
 export const actions = {
     changeTab: actionCreator<number>('ACTIONS_CHANGE_TAB'),
@@ -55,4 +56,7 @@ export const actions = {
     successSyncMessage: syncMessage.done,
     initSocket: actionCreator<string>('ACTIONS_INIT_SOCKET'),
     requestRestoreMessage: restoreMessage.started,
+    requestUpdateIcon: updateIcon.started,
+    failureUpdateIcon: updateIcon.failed,
+    successUpdateIcon: updateIcon.done,
 };

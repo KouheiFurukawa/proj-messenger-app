@@ -2,7 +2,7 @@ import * as React from 'react';
 import SearchIcon from '@material-ui/icons/Search';
 import Chat from '@material-ui/icons/Chat';
 import PeopleAlt from '@material-ui/icons/PeopleAlt';
-import Settings from '@material-ui/icons/Settings';
+import SettingsIcon from '@material-ui/icons/Settings';
 import { Button, ButtonBase, Grid, Paper, Tabs, Tab, Typography, makeStyles, colors } from '@material-ui/core';
 import { State } from '../redux/reducer';
 import { connect, useDispatch } from 'react-redux';
@@ -13,10 +13,10 @@ import { AppState } from '../redux/store';
 import ApiClient from './ApiClient';
 import * as H from 'history';
 import Search from './Search';
+import Settings from './Settings';
 
 interface OwnProps {
     handleOnChangeTab(value: number): void;
-    handleOnClickLogoutButton(props: MainProps): void;
     handleOnClickFriend(name: string, props: MainProps): void;
     history: H.History;
 }
@@ -37,14 +37,6 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
         handleOnChangeTab(value: number): void {
             dispatch(actions.changeTab(value));
-        },
-        handleOnClickLogoutButton(props: MainProps): void {
-            ApiClient.logout()
-                .then((data) => {
-                    props.history.push('/login');
-                    dispatch(actions.clearState());
-                })
-                .catch((err) => console.error(err));
         },
         handleOnClickFriend(name: string, props: MainProps): void {
             if (name !== props.chatFriend.displayName) {
@@ -82,13 +74,6 @@ const useStyles = makeStyles({
     tab: {
         height: '8vh',
         fontSize: 15,
-    },
-    gridItem: {
-        display: 'flex',
-        justifyContent: 'center',
-    },
-    button: {
-        width: '250px',
     },
     buttonBase: {
         width: '100%',
@@ -130,25 +115,7 @@ const Main: React.FC<MainProps> = (props: MainProps) => {
                             </ButtonBase>
                         );
                     })}
-                {props.tabValue === 3 && (
-                    <React.Fragment>
-                        <Grid container spacing={4}>
-                            <Grid item xs={12}>
-                                <Typography>Log in as: {props.loginInfo.displayName}</Typography>
-                            </Grid>
-                            <Grid item xs={12} className={classes.gridItem}>
-                                <Button
-                                    variant="contained"
-                                    color="secondary"
-                                    className={classes.button}
-                                    onClick={(e) => props.handleOnClickLogoutButton(props)}
-                                >
-                                    Log out
-                                </Button>
-                            </Grid>
-                        </Grid>
-                    </React.Fragment>
-                )}
+                {props.tabValue === 3 && <Settings history={props.history} />}
             </div>
             <Paper className={classes.bottomTabs} variant="outlined">
                 <Tabs
@@ -171,7 +138,7 @@ const Main: React.FC<MainProps> = (props: MainProps) => {
                         value={1}
                     />
                     <Tab
-                        icon={<Settings style={{ fontSize: 25 }} />}
+                        icon={<SettingsIcon style={{ fontSize: 25 }} />}
                         label="Settings"
                         className={classes.tab}
                         value={3}
