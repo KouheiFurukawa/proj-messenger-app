@@ -1,10 +1,13 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const session = require('express-session');
+const { Storage } = require('@google-cloud/storage');
+const Multer = require('multer');
+const {format} = require('util');
 const app = express();
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
+require('dotenv').config();
 
 app.use(
     require('express-session')({
@@ -40,6 +43,44 @@ io.on('connection', (socket) => {
     socket.on('updateMessage', async (params) => {
         io.to(clients[params.user_to]).emit('syncMessage:receive', params);
     })
+});
+
+const storage = new Storage();
+
+const multer = Multer({
+    storage: Multer.memoryStorage(),
+    limits: {
+        fileSize: 5 * 1024 * 1024, // no larger than 5mb, you can change as needed.
+    },
+});
+const bucket = storage.bucket(process.env.GCLOUD_STORAGE_BUCKET);
+
+app.post('/server/upload_image', multer.single('file'), (req, res, next) => {
+    if (!req.file) {
+        res.status(400).send('No file uploaded.');
+        return;
+    }
+
+    const blob = bucket.file(req.file.originalname);
+    const blobStream = blob.createWriteStream();
+
+    blobStream.on('error', err => {
+        next(err);
+    });
+
+    blobStream.on('finish', () => {
+        // The public URL can be used to directly access the file via HTTP.
+        const publicUrl = format(
+            `https://storage.googleapis.com/${bucket.name}/${blob.name}`
+        );
+        const updateIconQuery = `update users set icon_url = '${publicUrl}' where user_id = '${req.session.userId}'`;
+        connection.query(updateIconQuery, (error, results) => {
+           if (error) throw error;
+           res.json(publicUrl);
+        });
+    });
+
+    blobStream.end(req.file.buffer);
 });
 
 app.get('/server/get_user/', (req, res) => {
