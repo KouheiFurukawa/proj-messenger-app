@@ -50,5 +50,8 @@
     "build": "webpack --config webpack.config.js",
     "lint:fix": "tslint --project tsconfig.json --fix"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "workbox-sw": "^5.1.2",
+    "workbox-webpack-plugin": "^5.1.2"
+  }
 }
