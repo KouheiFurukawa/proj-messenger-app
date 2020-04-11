@@ -39,7 +39,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
         },
         handleOnClickFriend(friend: State['chatFriend'], props: MainProps): void {
             if (friend.displayName !== props.chatFriend.displayName) {
-                dispatch(actions.requestGetMessages({ user1: props.loginInfo.id, user2: name }));
+                dispatch(actions.requestGetMessages({ user1: props.loginInfo.id, user2: friend.id }));
             }
             dispatch(actions.changeChatFriend(friend));
             props.history.push('/talk');
