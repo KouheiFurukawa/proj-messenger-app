@@ -1,0 +1,16 @@
+{
+  "name": "Messenger App",
+  "short_name": "Messenger",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#fff",
+  "theme_color": "#3f51b5",
+  "icons": [
+    {
+      "src": "https://storage.googleapis.com/messenger-app/logo.png",
+      "type": "image/png",
+      "sizes": "225x225"
+    }
+  ]
+}
