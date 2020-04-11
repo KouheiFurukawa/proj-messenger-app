@@ -45,7 +45,7 @@ export const User: React.FC<UserProps> = (props: UserProps) => {
         <Paper className={classes.paper}>
             <Grid container className={classes.gridContainer}>
                 <Grid item className={classes.gridItem}>
-                    <Avatar className={classes.avatar}>?</Avatar>
+                    <Avatar className={classes.avatar} src={props.user.iconUrl} alt="?" />
                 </Grid>
                 <Grid item xs zeroMinWidth className={classes.gridName}>
                     <Typography noWrap className={classes.name}>

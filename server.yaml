@@ -3,3 +3,6 @@ runtime: nodejs10
 service: server
 
 instance_class: F1
+
+env_variables:
+  GCLOUD_STORAGE_BUCKET: messenger-app

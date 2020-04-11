@@ -2,3 +2,4 @@
 /.idea/
 /dist/
 /proj-messenger-app.iml
+.env

@@ -68,7 +68,7 @@ function* syncMessageHandler(socket: any) {
 function* getFriendsHandler() {
     while (true) {
         const { payload } = yield take('ACTIONS_GET_FRIENDS_STARTED');
-        const { result, error } = yield call(ApiClient.getFriend);
+        const { result, error } = yield call(ApiClient.getFriend, payload);
         if (result && !error) {
             yield put(actions.successGetFriends({ result, params: '' }));
         } else {
@@ -158,6 +158,18 @@ function* restoreMessage() {
     }
 }
 
+function* updateIconHandler() {
+    while (true) {
+        const { payload } = yield take('ACTIONS_UPDATE_ICON_STARTED');
+        const { result, error } = yield call(ApiClient.uploadImage, payload);
+        if (result && !error) {
+            yield put(actions.successUpdateIcon({ result, params: payload }));
+        } else {
+            yield put(actions.failureUpdateIcon({ error, params: payload }));
+        }
+    }
+}
+
 export function* sagas() {
     yield fork(getFriendsHandler);
     yield fork(getMessagesHandler);
@@ -167,4 +179,5 @@ export function* sagas() {
     yield fork(registerFriendHandler);
     yield fork(initSocketHandler);
     yield fork(restoreMessage);
+    yield fork(updateIconHandler);
 }
