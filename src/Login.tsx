@@ -65,6 +65,8 @@ const mapStateToProps = (appState: AppState) => {
 const useStyles = makeStyles({
     root: {
         height: '100vh',
+        width: '100vw',
+        position: 'fixed',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',

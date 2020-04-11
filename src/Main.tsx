@@ -52,6 +52,8 @@ type MainProps = OwnProps & State;
 const useStyles = makeStyles({
     main: {
         height: '85vh',
+        width: '100%',
+        position: 'fixed',
     },
     header: {
         height: '7vh',
