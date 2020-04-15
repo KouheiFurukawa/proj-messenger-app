@@ -64,4 +64,7 @@ export const actions = {
     requestUpdateIcon: updateIcon.started,
     failureUpdateIcon: updateIcon.failed,
     successUpdateIcon: updateIcon.done,
+    changeEditFriend: actionCreator<void>('ACTIONS_CHANGE_EDIT_FRIEND'),
+    checkFriend: actionCreator<string>('ACTIONS_CHECK_FRIEND'),
+    uncheckFriend: actionCreator<string>('ACTIONS_UNCHECK_FRIEND'),
 };

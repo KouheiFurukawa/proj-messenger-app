@@ -1,5 +1,8 @@
 import * as React from 'react';
-import { Avatar, Grid, Paper, Typography, makeStyles } from '@material-ui/core';
+import { State } from '../redux/reducer';
+import { AppState } from '../redux/store';
+import { Avatar, Grid, Paper, Typography, makeStyles, Radio } from '@material-ui/core';
+import { connect } from 'react-redux';
 
 interface OwnProps {
     user: {
@@ -8,7 +11,14 @@ interface OwnProps {
     };
 }
 
-type UserProps = OwnProps;
+type UserProps = OwnProps & Pick<State, 'editFriend' | 'checkedFriend'>;
+
+const mapStateToProps = (appState: AppState) => {
+    return {
+        editFriend: appState.state.editFriend,
+        checkedFriend: appState.state.checkedFriend,
+    };
+};
 
 const useStyles = makeStyles({
     gridContainer: {
@@ -38,12 +48,17 @@ const useStyles = makeStyles({
     },
 });
 
-export const User: React.FC<UserProps> = (props: UserProps) => {
+const User: React.FC<UserProps> = (props: UserProps) => {
     const classes = useStyles();
 
     return (
-        <Paper className={classes.paper}>
+        <Paper className={classes.paper} elevation={3}>
             <Grid container className={classes.gridContainer}>
+                {props.editFriend && (
+                    <Grid item>
+                        <Radio checked={props.checkedFriend.indexOf(props.user.displayName) !== -1} />
+                    </Grid>
+                )}
                 <Grid item className={classes.gridItem}>
                     <Avatar className={classes.avatar} src={props.user.iconUrl} alt="?" />
                 </Grid>
@@ -56,3 +71,5 @@ export const User: React.FC<UserProps> = (props: UserProps) => {
         </Paper>
     );
 };
+
+export default connect(mapStateToProps)(User);

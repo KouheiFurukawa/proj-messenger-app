@@ -9,6 +9,9 @@ automatic_scaling:
 handlers:
   - url: /static
     static_dir: dist/static
+  - url: /manifest.json
+    static_files: manifest.json
+    upload: manifest.json
   - url: /(.*\.(json|ico|js))$
     static_files: dist/\1
     upload: dist.*\.(json|ico|js)$

@@ -26,6 +26,8 @@ export interface State {
         id: string;
         iconUrl: string;
     };
+    editFriend: boolean;
+    checkedFriend: string[];
 }
 
 export const initialState: State = {
@@ -53,6 +55,8 @@ export const initialState: State = {
         id: '',
         iconUrl: '',
     },
+    editFriend: false,
+    checkedFriend: [],
 };
 
 export const reducer = reducerWithInitialState(initialState)
@@ -137,4 +141,15 @@ export const reducer = reducerWithInitialState(initialState)
     .case(actions.successUpdateIcon, (state, action) => {
         const newLoginInfo = { ...state.loginInfo, iconUrl: action.result };
         return { ...state, loginInfo: newLoginInfo };
+    })
+    .case(actions.changeEditFriend, (state, action) => {
+        return { ...state, editFriend: !state.editFriend };
+    })
+    .case(actions.checkFriend, (state, action) => {
+        const newCheckedFriend = state.checkedFriend.concat(action);
+        return { ...state, checkedFriend: newCheckedFriend };
+    })
+    .case(actions.uncheckFriend, (state, action) => {
+        const newCheckedFriend = state.checkedFriend.filter((friend) => friend !== action);
+        return { ...state, checkedFriend: newCheckedFriend };
     });
