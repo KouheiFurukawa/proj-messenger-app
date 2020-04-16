@@ -24,11 +24,15 @@ app.use(
 const server = app.listen(process.env.PORT || 3000, () => console.log('Server listening on port 3000!'));
 
 const mysql = require('mysql');
-const connection = mysql.createConnection({
+const connection = process.env.PORT ? mysql.createConnection({
     user: 'root', // e.g. 'my-db-user'
     password: '', // e.g. 'my-db-password'
     database: 'MessengerApp', // e.g. 'my-database'
-    // socketPath: '/cloudsql/ardent-justice-273102:us-central1:messenger-app',
+    socketPath: '/cloudsql/ardent-justice-273102:us-central1:messenger-app',
+}) : mysql.createConnection({
+    user: 'root', // e.g. 'my-db-user'
+    password: '', // e.g. 'my-db-password'
+    database: 'MessengerApp', // e.g. 'my-database'
     host: 'localhost',
 });
 

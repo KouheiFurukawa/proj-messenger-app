@@ -5,8 +5,10 @@ import ApiClient from '../src/ApiClient';
 import io from 'socket.io-client';
 
 function createSocketConnection(id: string) {
-    const socket = io('http://localhost:3000');
-    // const socket = io('https://server-dot-ardent-justice-273102.appspot.com');
+    const socket =
+        process.env.NODE_ENV === 'development'
+            ? io('http://localhost:3000')
+            : io('https://server-dot-ardent-justice-273102.appspot.com');
 
     return new Promise((resolve) => {
         socket.on('connect', () => {
@@ -175,6 +177,7 @@ function* deleteFriendsHandler() {
         const { payload } = yield take('ACTIONS_DELETE_FRIENDS_STARTED');
         const { result, error } = yield call(ApiClient.deleteFriends, payload);
         if (result && !error) {
+            yield put(actions.requestGetFriends(payload.userId));
             yield put(actions.successDeleteFriends({ result, params: payload }));
         } else {
             yield put(actions.failureDeleteFriends({ error, params: payload }));
