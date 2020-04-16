@@ -170,6 +170,18 @@ function* updateIconHandler() {
     }
 }
 
+function* deleteFriendsHandler() {
+    while (true) {
+        const { payload } = yield take('ACTIONS_DELETE_FRIENDS_STARTED');
+        const { result, error } = yield call(ApiClient.deleteFriends, payload);
+        if (result && !error) {
+            yield put(actions.successDeleteFriends({ result, params: payload }));
+        } else {
+            yield put(actions.failureDeleteFriends({ error, params: payload }));
+        }
+    }
+}
+
 export function* sagas() {
     yield fork(getFriendsHandler);
     yield fork(getMessagesHandler);
@@ -180,4 +192,5 @@ export function* sagas() {
     yield fork(initSocketHandler);
     yield fork(restoreMessage);
     yield fork(updateIconHandler);
+    yield fork(deleteFriendsHandler);
 }

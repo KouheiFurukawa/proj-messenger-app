@@ -152,4 +152,8 @@ export const reducer = reducerWithInitialState(initialState)
     .case(actions.uncheckFriend, (state, action) => {
         const newCheckedFriend = state.checkedFriend.filter((friend) => friend !== action);
         return { ...state, checkedFriend: newCheckedFriend };
+    })
+    .case(actions.successDeleteFriends, (state, action) => {
+        const newFriends = state.friends.filter((friend) => action.params.friends.indexOf(friend.friend_id) === -1);
+        return { ...state, friends: newFriends, checkedFriend: [], editFriend: false };
     });

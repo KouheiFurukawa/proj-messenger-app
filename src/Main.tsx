@@ -3,7 +3,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import Chat from '@material-ui/icons/Chat';
 import PeopleAlt from '@material-ui/icons/PeopleAlt';
 import SettingsIcon from '@material-ui/icons/Settings';
-import { Paper, Tabs, Tab, makeStyles, colors } from '@material-ui/core';
+import { Paper, Tabs, Tab, makeStyles, colors, IconButton } from '@material-ui/core';
 import { State } from '../redux/reducer';
 import { connect, useDispatch } from 'react-redux';
 import { Dispatch } from 'redux';
@@ -13,9 +13,11 @@ import * as H from 'history';
 import Search from './Search';
 import Settings from './Settings';
 import FriendsList from './FriendsList';
+import Edit from '@material-ui/icons/Edit';
 
 interface OwnProps {
     handleOnChangeTab(value: number): void;
+    handleOnClickEditButton(): void;
     history: H.History;
 }
 
@@ -33,6 +35,9 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
         handleOnChangeTab(value: number): void {
             dispatch(actions.changeTab(value));
+        },
+        handleOnClickEditButton(): void {
+            dispatch(actions.changeEditFriend());
         },
     };
 };
@@ -52,8 +57,9 @@ const useStyles = makeStyles({
         fontSize: '30px',
         paddingLeft: '30px',
         display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
         borderRadius: '0',
     },
     bottomTabs: {
@@ -88,6 +94,11 @@ const Main: React.FC<MainProps> = (props: MainProps) => {
                     {props.tabValue === 2 && 'Chat'}
                     {props.tabValue === 3 && 'Settings'}
                 </span>
+                {props.tabValue === 1 && (
+                    <IconButton onClick={(e) => props.handleOnClickEditButton()}>
+                        <Edit style={{ color: 'white' }} />
+                    </IconButton>
+                )}
             </Paper>
             <div className={classes.main}>
                 {props.tabValue === 0 && <Search />}

@@ -52,7 +52,7 @@ const User: React.FC<UserProps> = (props: UserProps) => {
     const classes = useStyles();
 
     return (
-        <Paper className={classes.paper} elevation={3}>
+        <Paper className={classes.paper} elevation={0}>
             <Grid container className={classes.gridContainer}>
                 {props.editFriend && (
                     <Grid item>

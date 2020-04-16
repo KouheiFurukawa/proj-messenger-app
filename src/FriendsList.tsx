@@ -10,10 +10,8 @@ import { connect } from 'react-redux';
 
 interface OwnProps {
     history: H.History;
-
     handleOnClickFriend(friend: State['chatFriend'], props: FriendsListProps): void;
-
-    handleOnClickEditButton(): void;
+    handleOnClickDeleteButton(userId: string, friends: string[]): void;
 }
 
 type FriendsListProps = OwnProps & Pick<State, 'friends' | 'chatFriend' | 'loginInfo' | 'editFriend' | 'checkedFriend'>;
@@ -45,8 +43,8 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
                 }
             }
         },
-        handleOnClickEditButton(): void {
-            dispatch(actions.changeEditFriend());
+        handleOnClickDeleteButton(userId: string, friends: string[]): void {
+            dispatch(actions.requestDeleteFriends({ userId, friends }));
         },
     };
 };
@@ -59,6 +57,13 @@ const useStyles = makeStyles({
         display: 'flex',
         justifyContent: 'flex-end',
     },
+    deleteButtonContainer: {
+        display: 'flex',
+        justifyContent: 'center',
+        position: 'fixed',
+        bottom: '10vh',
+        width: '100%',
+    },
 });
 
 const FriendsList: React.FC<FriendsListProps> = (props: FriendsListProps) => {
@@ -66,33 +71,41 @@ const FriendsList: React.FC<FriendsListProps> = (props: FriendsListProps) => {
 
     return (
         <React.Fragment>
-            <Grid container spacing={2}>
-                <Grid item xs={12} className={classes.editButtonContainer}>
-                    <Button variant="contained" color="secondary" onClick={(e) => props.handleOnClickEditButton()}>
-                        Edit
-                    </Button>
-                </Grid>
+            <Grid container spacing={1} style={{ marginTop: '0' }}>
+                {props.friends.map((friend) => {
+                    return (
+                        <Grid item xs={12}>
+                            <ButtonBase
+                                onClick={(e) =>
+                                    props.handleOnClickFriend(
+                                        {
+                                            id: friend.friend_id,
+                                            displayName: friend.friend_id,
+                                            iconUrl: friend.friend_icon_url,
+                                        },
+                                        props,
+                                    )
+                                }
+                                key={friend.id}
+                                className={classes.buttonBase}
+                            >
+                                <User user={{ displayName: friend.friend_id, iconUrl: friend.friend_icon_url }} />
+                            </ButtonBase>
+                        </Grid>
+                    );
+                })}
             </Grid>
-            {props.friends.map((friend) => {
-                return (
-                    <ButtonBase
-                        onClick={(e) =>
-                            props.handleOnClickFriend(
-                                {
-                                    id: friend.friend_id,
-                                    displayName: friend.friend_id,
-                                    iconUrl: friend.friend_icon_url,
-                                },
-                                props,
-                            )
-                        }
-                        key={friend.id}
-                        className={classes.buttonBase}
+            {props.checkedFriend.length > 0 && (
+                <div className={classes.deleteButtonContainer}>
+                    <Button
+                        color="secondary"
+                        variant="contained"
+                        onClick={(e) => props.handleOnClickDeleteButton(props.loginInfo.id, props.checkedFriend)}
                     >
-                        <User user={{ displayName: friend.friend_id, iconUrl: friend.friend_icon_url }} />
-                    </ButtonBase>
-                );
-            })}
+                        Delete {props.checkedFriend.length} friends
+                    </Button>
+                </div>
+            )}
         </React.Fragment>
     );
 };

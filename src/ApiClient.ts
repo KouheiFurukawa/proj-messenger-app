@@ -152,4 +152,21 @@ export default class ApiClient {
                 return { error };
             });
     }
+
+    static deleteFriends(params: { userId: string; friends: string[] }) {
+        return fetch('/server/delete_friends/', {
+            method: 'POST',
+            body: JSON.stringify(params),
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                return { result: data };
+            })
+            .catch((error) => {
+                return { error };
+            });
+    }
 }

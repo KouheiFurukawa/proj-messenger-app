@@ -27,6 +27,9 @@ export const restoreMessage = actionCreator.async<{ id: string; displayName: str
     'ACTIONS_RESTORE_MESSAGE',
 );
 export const updateIcon = actionCreator.async<{ file: File; id: string }, any, Error>('ACTIONS_UPDATE_ICON');
+export const deleteFriends = actionCreator.async<{ userId: string; friends: string[] }, any, Error>(
+    'ACTIONS_DELETE_FRIENDS',
+);
 
 export const actions = {
     changeTab: actionCreator<number>('ACTIONS_CHANGE_TAB'),
@@ -67,4 +70,7 @@ export const actions = {
     changeEditFriend: actionCreator<void>('ACTIONS_CHANGE_EDIT_FRIEND'),
     checkFriend: actionCreator<string>('ACTIONS_CHECK_FRIEND'),
     uncheckFriend: actionCreator<string>('ACTIONS_UNCHECK_FRIEND'),
+    requestDeleteFriends: deleteFriends.started,
+    failureDeleteFriends: deleteFriends.failed,
+    successDeleteFriends: deleteFriends.done,
 };

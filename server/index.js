@@ -182,6 +182,21 @@ app.post('/server/register_friend/', (req, res) => {
     });
 });
 
+app.post('/server/delete_friends/', (req, res) => {
+    let query = 'delete from friendship where ';
+    req.body.friends.forEach(friend => {
+        query = query + `(user_id='${friend}' and friend_id='${req.body.userId}') or (user_id='${req.body.userId}' and friend_id='${friend}') or `
+    });
+    console.log(query.slice(0, -3));
+    connection.query(query.slice(0, -3), (err, results) => {
+        if (err) {
+            throw new Error(err);
+        } else {
+            res.json(results);
+        }
+    });
+});
+
 module.exports = {
     path: '/server',
     handler: app
