@@ -18,13 +18,14 @@ interface OwnProps {
     ): void;
 }
 
-type SearchProps = OwnProps & Pick<State, 'searchResult' | 'userSearchInput' | 'loginInfo'>;
+type SearchProps = OwnProps & Pick<State, 'searchResult' | 'userSearchInput' | 'loginInfo' | 'friends'>;
 
 const mapStateToProps = (appState: AppState) => {
     return {
         searchResult: appState.state.searchResult,
         userSearchInput: appState.state.userSearchInput,
         loginInfo: appState.state.loginInfo,
+        friends: appState.state.friends,
     };
 };
 
@@ -105,20 +106,26 @@ const Search: React.FC<SearchProps> = (props: SearchProps) => {
                             <Typography>{props.searchResult.displayName}</Typography>
                         </Grid>
                         <Grid item xs={12} className={classes.gridSearchResult}>
-                            <Button
-                                color="primary"
-                                variant="contained"
-                                onClick={(e) =>
-                                    props.handleOnClickRegisterFriendButton(
-                                        props.loginInfo.id,
-                                        props.searchResult.id,
-                                        props.loginInfo.iconUrl,
-                                        props.searchResult.iconUrl,
-                                    )
-                                }
-                            >
-                                Become Friends
-                            </Button>
+                            {props.friends.findIndex((friend) => friend.friend_id === props.searchResult.id) !== -1 ? (
+                                <Button disabled variant="contained">
+                                    Already Friends
+                                </Button>
+                            ) : (
+                                <Button
+                                    color="primary"
+                                    variant="contained"
+                                    onClick={(e) =>
+                                        props.handleOnClickRegisterFriendButton(
+                                            props.loginInfo.id,
+                                            props.searchResult.id,
+                                            props.loginInfo.iconUrl,
+                                            props.searchResult.iconUrl,
+                                        )
+                                    }
+                                >
+                                    Become Friends
+                                </Button>
+                            )}
                         </Grid>
                     </Grid>
                 )}

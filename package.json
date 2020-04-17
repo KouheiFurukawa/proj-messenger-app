@@ -46,8 +46,11 @@
     "webpack-dev-server": "^3.10.3"
   },
   "scripts": {
-    "start": "concurrently \"webpack-dev-server --mode development --config webpack.config.js\" \"node server/index.js\"",
-    "build": "webpack --config webpack.config.js",
+    "start:dev": "concurrently \"webpack-dev-server --config webpack.config.js\" \"node server/index.js\"",
+    "start:prod": "concurrently \"webpack-dev-server --config webpack.config.prod.js\" \"PORT=3000 node server/index.js\"",
+    "start": "node server/index.js",
+    "build:dev": "webpack --config webpack.config.js",
+    "build:prod": "webpack --config webpack.config.prod.js",
     "lint:fix": "tslint --project tsconfig.json --fix"
   },
   "devDependencies": {

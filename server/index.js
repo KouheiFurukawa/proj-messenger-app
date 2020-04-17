@@ -24,11 +24,15 @@ app.use(
 const server = app.listen(process.env.PORT || 3000, () => console.log('Server listening on port 3000!'));
 
 const mysql = require('mysql');
-const connection = mysql.createConnection({
+const connection = process.env.PORT ? mysql.createConnection({
     user: 'root', // e.g. 'my-db-user'
     password: '', // e.g. 'my-db-password'
     database: 'MessengerApp', // e.g. 'my-database'
-    // socketPath: '/cloudsql/ardent-justice-273102:us-central1:messenger-app',
+    socketPath: '/cloudsql/ardent-justice-273102:us-central1:messenger-app',
+}) : mysql.createConnection({
+    user: 'root', // e.g. 'my-db-user'
+    password: '', // e.g. 'my-db-password'
+    database: 'MessengerApp', // e.g. 'my-database'
     host: 'localhost',
 });
 
@@ -174,6 +178,21 @@ app.get('/server/search_user/:id', (req, res) => {
 app.post('/server/register_friend/', (req, res) => {
     const query = `insert into friendship (user_id,friend_id,user_icon_url,friend_icon_url) values ('${req.body.user_id}','${req.body.friend_id}','${req.body.user_icon_url}','${req.body.friend_icon_url}')`;
     connection.query(query, (err, results) => {
+        if (err) {
+            throw new Error(err);
+        } else {
+            res.json(results);
+        }
+    });
+});
+
+app.post('/server/delete_friends/', (req, res) => {
+    let query = 'delete from friendship where ';
+    req.body.friends.forEach(friend => {
+        query = query + `(user_id='${friend}' and friend_id='${req.body.userId}') or (user_id='${req.body.userId}' and friend_id='${friend}') or `
+    });
+    console.log(query.slice(0, -3));
+    connection.query(query.slice(0, -3), (err, results) => {
         if (err) {
             throw new Error(err);
         } else {

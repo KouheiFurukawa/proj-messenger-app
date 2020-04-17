@@ -5,8 +5,10 @@ import ApiClient from '../src/ApiClient';
 import io from 'socket.io-client';
 
 function createSocketConnection(id: string) {
-    const socket = io('http://localhost:3000');
-    // const socket = io('https://server-dot-ardent-justice-273102.appspot.com');
+    const socket =
+        process.env.NODE_ENV === 'development'
+            ? io('http://localhost:3000')
+            : io('https://server-dot-ardent-justice-273102.appspot.com');
 
     return new Promise((resolve) => {
         socket.on('connect', () => {
@@ -20,11 +22,6 @@ function subscribe(socket: any) {
     return eventChannel((emit) => {
         const syncMessage = async (message: any) => {
             emit(actions.successSyncMessage({ result: message, params: message }));
-            const el = document.getElementById('grid-chat-log');
-            if (el) {
-                const bottom = el ? el.scrollHeight - el.clientHeight : 0;
-                el.scroll(0, bottom);
-            }
         };
 
         socket.on('syncMessage:receive', syncMessage);
@@ -83,6 +80,12 @@ function* getMessagesHandler() {
         const { result, error } = yield call(ApiClient.getMessage, payload);
         if (result && !error) {
             yield put(actions.successGetMessages({ result, params: payload }));
+            const el = document.getElementById('grid-chat-log');
+            if (el) {
+                const bottom = el ? el.scrollHeight - el.clientHeight : 0;
+                console.log(el.scrollHeight, el.clientHeight);
+                el.scroll(0, bottom);
+            }
         } else {
             yield put(actions.failureGetFriends({ error, params: payload }));
         }
@@ -170,6 +173,18 @@ function* updateIconHandler() {
     }
 }
 
+function* deleteFriendsHandler() {
+    while (true) {
+        const { payload } = yield take('ACTIONS_DELETE_FRIENDS_STARTED');
+        const { result, error } = yield call(ApiClient.deleteFriends, payload);
+        if (result && !error) {
+            yield put(actions.successDeleteFriends({ result, params: payload }));
+        } else {
+            yield put(actions.failureDeleteFriends({ error, params: payload }));
+        }
+    }
+}
+
 export function* sagas() {
     yield fork(getFriendsHandler);
     yield fork(getMessagesHandler);
@@ -180,4 +195,5 @@ export function* sagas() {
     yield fork(initSocketHandler);
     yield fork(restoreMessage);
     yield fork(updateIconHandler);
+    yield fork(deleteFriendsHandler);
 }

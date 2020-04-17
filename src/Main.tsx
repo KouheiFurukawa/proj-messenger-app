@@ -3,20 +3,21 @@ import SearchIcon from '@material-ui/icons/Search';
 import Chat from '@material-ui/icons/Chat';
 import PeopleAlt from '@material-ui/icons/PeopleAlt';
 import SettingsIcon from '@material-ui/icons/Settings';
-import { ButtonBase, Paper, Tabs, Tab, makeStyles, colors } from '@material-ui/core';
+import { Paper, Tabs, Tab, makeStyles, colors, IconButton } from '@material-ui/core';
 import { State } from '../redux/reducer';
 import { connect, useDispatch } from 'react-redux';
 import { Dispatch } from 'redux';
 import { actions } from '../redux/actions';
-import { User } from './User';
 import { AppState } from '../redux/store';
 import * as H from 'history';
 import Search from './Search';
 import Settings from './Settings';
+import FriendsList from './FriendsList';
+import Edit from '@material-ui/icons/Edit';
 
 interface OwnProps {
     handleOnChangeTab(value: number): void;
-    handleOnClickFriend(friend: State['chatFriend'], props: MainProps): void;
+    handleOnClickEditButton(): void;
     history: H.History;
 }
 
@@ -25,10 +26,8 @@ const mapStateToProps = (appState: AppState) => {
         tabValue: appState.state.tabValue,
         textInput: appState.state.textInput,
         userSearchInput: appState.state.userSearchInput,
-        friends: appState.state.friends,
         messages: appState.state.messages,
         loginInfo: appState.state.loginInfo,
-        chatFriend: appState.state.chatFriend,
     };
 };
 
@@ -37,12 +36,8 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
         handleOnChangeTab(value: number): void {
             dispatch(actions.changeTab(value));
         },
-        handleOnClickFriend(friend: State['chatFriend'], props: MainProps): void {
-            if (friend.displayName !== props.chatFriend.displayName) {
-                dispatch(actions.requestGetMessages({ user1: props.loginInfo.id, user2: friend.id }));
-            }
-            dispatch(actions.changeChatFriend(friend));
-            props.history.push('/talk');
+        handleOnClickEditButton(): void {
+            dispatch(actions.changeEditFriend());
         },
     };
 };
@@ -62,8 +57,9 @@ const useStyles = makeStyles({
         fontSize: '30px',
         paddingLeft: '30px',
         display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
         borderRadius: '0',
     },
     bottomTabs: {
@@ -75,9 +71,6 @@ const useStyles = makeStyles({
     tab: {
         height: '8vh',
         fontSize: 15,
-    },
-    buttonBase: {
-        width: '100%',
     },
 });
 
@@ -101,30 +94,15 @@ const Main: React.FC<MainProps> = (props: MainProps) => {
                     {props.tabValue === 2 && 'Chat'}
                     {props.tabValue === 3 && 'Settings'}
                 </span>
+                {props.tabValue === 1 && (
+                    <IconButton onClick={(e) => props.handleOnClickEditButton()}>
+                        <Edit style={{ color: 'white' }} />
+                    </IconButton>
+                )}
             </Paper>
             <div className={classes.main}>
                 {props.tabValue === 0 && <Search />}
-                {props.tabValue === 1 &&
-                    props.friends.map((friend) => {
-                        return (
-                            <ButtonBase
-                                onClick={(e) =>
-                                    props.handleOnClickFriend(
-                                        {
-                                            id: friend.friend_id,
-                                            displayName: friend.friend_id,
-                                            iconUrl: friend.friend_icon_url,
-                                        },
-                                        props,
-                                    )
-                                }
-                                key={friend.id}
-                                className={classes.buttonBase}
-                            >
-                                <User user={{ displayName: friend.friend_id, iconUrl: friend.friend_icon_url }} />
-                            </ButtonBase>
-                        );
-                    })}
+                {props.tabValue === 1 && <FriendsList history={props.history} />}
                 {props.tabValue === 3 && <Settings history={props.history} />}
             </div>
             <Paper className={classes.bottomTabs} variant="outlined">
