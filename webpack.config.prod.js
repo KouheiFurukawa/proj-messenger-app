@@ -79,6 +79,10 @@ module.exports = {
                     },
                 },
                 {
+                    urlPattern: new RegExp('/server/get_friend/'),
+                    handler: 'NetworkFirst',
+                },
+                {
                     urlPattern: new RegExp('/server/'),
                     handler: 'CacheFirst',
                     options: {
