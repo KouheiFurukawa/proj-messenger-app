@@ -22,11 +22,6 @@ function subscribe(socket: any) {
     return eventChannel((emit) => {
         const syncMessage = async (message: any) => {
             emit(actions.successSyncMessage({ result: message, params: message }));
-            const el = document.getElementById('grid-chat-log');
-            if (el) {
-                const bottom = el ? el.scrollHeight - el.clientHeight : 0;
-                el.scroll(0, bottom);
-            }
         };
 
         socket.on('syncMessage:receive', syncMessage);
@@ -85,6 +80,12 @@ function* getMessagesHandler() {
         const { result, error } = yield call(ApiClient.getMessage, payload);
         if (result && !error) {
             yield put(actions.successGetMessages({ result, params: payload }));
+            const el = document.getElementById('grid-chat-log');
+            if (el) {
+                const bottom = el ? el.scrollHeight - el.clientHeight : 0;
+                console.log(el.scrollHeight, el.clientHeight);
+                el.scroll(0, bottom);
+            }
         } else {
             yield put(actions.failureGetFriends({ error, params: payload }));
         }
@@ -177,7 +178,6 @@ function* deleteFriendsHandler() {
         const { payload } = yield take('ACTIONS_DELETE_FRIENDS_STARTED');
         const { result, error } = yield call(ApiClient.deleteFriends, payload);
         if (result && !error) {
-            yield put(actions.requestGetFriends(payload.userId));
             yield put(actions.successDeleteFriends({ result, params: payload }));
         } else {
             yield put(actions.failureDeleteFriends({ error, params: payload }));
