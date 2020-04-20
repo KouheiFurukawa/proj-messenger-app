@@ -16,7 +16,7 @@ app.use(
         saveUninitialized: false,
         cookie: {
             secure: 'auto',
-            maxage: 1000 * 60 * 30
+            maxage: 1000 * 60 * 60 * 72
         }
     })
 );
