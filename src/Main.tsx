@@ -66,6 +66,7 @@ const useStyles = makeStyles({
         height: '9vh',
         position: 'fixed',
         width: '100%',
+        bottom: '0',
         borderRadius: '0',
     },
     tab: {
