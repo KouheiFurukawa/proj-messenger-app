@@ -65,7 +65,6 @@ const useStyles = makeStyles({
     bottomTabs: {
         height: '9vh',
         position: 'fixed',
-        bottom: '3px',
         width: '100%',
         borderRadius: '0',
     },
