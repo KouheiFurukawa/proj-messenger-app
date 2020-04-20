@@ -63,10 +63,11 @@ const useStyles = makeStyles({
         borderRadius: '0',
     },
     bottomTabs: {
-        height: '8vh',
+        height: '9vh',
         position: 'fixed',
         bottom: '3px',
         width: '100%',
+        borderRadius: '0',
     },
     tab: {
         height: '8vh',
@@ -111,22 +112,23 @@ const Main: React.FC<MainProps> = (props: MainProps) => {
                     indicatorColor="primary"
                     textColor="primary"
                     value={props.tabValue}
+                    style={{ height: '100%' }}
                     onChange={(e, newVal) => props.handleOnChangeTab(newVal)}
                 >
                     <Tab
-                        icon={<SearchIcon style={{ fontSize: 25 }} />}
+                        icon={<SearchIcon style={{ fontSize: 25, marginBottom: 0 }} />}
                         label="Search"
                         className={classes.tab}
                         value={0}
                     />
                     <Tab
-                        icon={<PeopleAlt style={{ fontSize: 25 }} />}
+                        icon={<PeopleAlt style={{ fontSize: 25, marginBottom: 0 }} />}
                         label="Friends"
                         className={classes.tab}
                         value={1}
                     />
                     <Tab
-                        icon={<SettingsIcon style={{ fontSize: 25 }} />}
+                        icon={<SettingsIcon style={{ fontSize: 25, marginBottom: 0 }} />}
                         label="Settings"
                         className={classes.tab}
                         value={3}
